@@ -1,72 +1,25 @@
 <template>
-  <div class="app">
-    <nav class="navbar">
-      <div class="header">Chats</div>
-      <div class="messages">
-        <div class="header" v-for="chat in getChats()" :key="chat">
-          <div class="user">{{ chat.name }}</div>
-        </div>
-      </div>
-    </nav>
-    <main>
-      <div class="header">{{ $store.state.users[$store.state.companionId].name }}</div>
-      <div class="messages">
-        <div class="message" v-for="message in getMessages()" :key="message">
-          <div
-            class="bubble"
-            :class="message.senderId === $store.state.currentId && 'bubble_current'"
-          >
-            {{ message.text }}
-          </div>
-        </div>
-      </div>
-      <form class="form" @submit.prevent="addMessage(value)">
-        <input class="input" type="text" v-model="value" placeholder="Enter message" />
-        <button class="button" type="submit"><img src="../resources/send.svg" /></button>
-      </form>
-    </main>
-  </div>
+  <main>
+    <Navbar />
+    <Chat />
+  </main>
 </template>
 
 <script>
+import Navbar from './Navbar'
+import Chat from './Chat'
 export default {
-  name: 'App',
-  components: {},
-  data() {
-    return {
-      value: ''
-    }
+  created() {
+    window.addEventListener('resize', () => (this.$store.state.width = window.innerWidth))
   },
+  destroyed() {
+    window.removeEventListener('resize', () => (this.$store.state.width = window.innerWidth))
+  },
+  name: 'App',
+  components: { Navbar, Chat },
   methods: {
-    addMessage(text) {
-      this.$store.commit('addMessage', { text })
-      this.value = ''
-    },
-    getMessages() {
-      let messages = []
-      this.$store.state.messages.map(
-        (message) =>
-          message.senderId === this.$store.state.currentId &&
-          message.receiverId === this.$store.state.companionId &&
-          messages.push(message)
-      )
-      this.$store.state.messages.map(
-        (message) =>
-          message.senderId === this.$store.state.companionId &&
-          message.receiverId === this.$store.state.currentId &&
-          messages.push(message)
-      )
-      return messages
-    },
-    getChats() {
-      let chats = []
-      this.$store.state.messages.map(
-        (message) =>
-          message.senderId === this.$store.state.currentId ||
-          (message.receiverId === this.$store.state.currentId &&
-            chats.push(this.$store.state.users[message.senderId]))
-      )
-      return chats
+    setCompanion(id) {
+      this.$store.commit('setCompanion', { id })
     }
   }
 }
@@ -84,7 +37,14 @@ export default {
   font-family: sans-serif;
 }
 
-.app {
+h1 {
+  margin: 10px;
+}
+button {
+  cursor: pointer;
+}
+
+main {
   max-width: 1000px;
   margin: 0 auto;
   height: 100vh;
@@ -93,57 +53,27 @@ export default {
   display: flex;
 }
 
-.navbar {
-  width: 400px;
-  border-right: 1px solid gainsboro;
-}
-
-.chat {
-  height: 50px;
-}
-
-main {
-  height: 100%;
-  width: 100%;
-}
-
-.header {
+.user {
   height: 50px;
   display: flex;
   align-items: center;
   padding: 10px;
 }
 
-.messages {
-  border-top: 1px solid gainsboro;
-  border-bottom: 1px solid gainsboro;
-  height: calc(100% - 100px);
-  overflow-y: scroll;
-  display: flex;
-  flex-direction: column-reverse;
+.avatar {
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  object-fit: cover;
+  margin-right: 10px;
 }
 
-.message {
-  width: 100%;
-  margin-bottom: 10px;
-  font-size: 16px;
+.header {
+  height: 50px;
   display: flex;
   align-items: center;
-}
-
-.bubble {
-  border: 1px solid gainsboro;
-  border-radius: 15px;
-  max-width: 320px;
-  padding: 10px 14px;
-  margin: 2px 12px;
-  word-break: break-word;
-  white-space: pre-wrap;
-}
-
-.bubble_current {
-  margin-left: auto;
-  background-color: #f1f1f1;
+  justify-content: space-between;
+  border-bottom: 1px solid gainsboro;
 }
 
 .form {
@@ -160,6 +90,13 @@ main {
 }
 
 .button {
-  margin: 10px;
+  width: 50px;
+  height: 50px;
+}
+
+@media (min-width: 500px) {
+  .mobile {
+    display: none;
+  }
 }
 </style>
