@@ -53,6 +53,11 @@ main {
   display: flex;
 }
 
+.flex {
+  display: flex;
+  align-items: center;
+}
+
 .user {
   height: 50px;
   display: flex;
@@ -60,20 +65,24 @@ main {
   padding: 10px;
 }
 
+.name {
+  margin-left: 10px;
+}
+
 .avatar {
   border-radius: 50%;
   height: 30px;
   width: 30px;
   object-fit: cover;
-  margin-right: 10px;
 }
 
 .header {
   height: 50px;
-  display: flex;
+  display: grid;
+  grid-auto-flow: column;
+  border-bottom: 1px solid gainsboro;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid gainsboro;
 }
 
 .form {
@@ -90,8 +99,24 @@ main {
 }
 
 .button {
-  width: 50px;
   height: 50px;
+  padding: 0 10px;
+}
+
+.overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.menu {
+  background-color: white;
+  border: 1px solid gainsboro;
+  width: 200px;
+  margin: 10px 10px 10px auto;
 }
 
 @media (min-width: 500px) {

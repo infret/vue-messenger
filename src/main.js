@@ -61,6 +61,14 @@ new Vue({
       },
       setCompanion(state, { id }) {
         state.companionId = id
+      },
+      clearChat(state) {
+        state.messages = state.messages.filter(
+          ({ senderId, receiverId }) =>
+            !(senderId === state.currentId && receiverId === state.companionId) &&
+            !(senderId === state.companionId && receiverId === state.currentId)
+        )
+        state.companionId = -1
       }
     }
   }),
