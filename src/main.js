@@ -7,8 +7,9 @@ Vue.use(Vuex)
 new Vue({
   store: new Vuex.Store({
     state: {
+      time: Date.now() / 1000,
       currentId: 0,
-      companionId: -1,
+      companionId: 1,
       width: window.innerWidth,
       users: [
         {
@@ -43,11 +44,11 @@ new Vue({
         }
       ],
       messages: [
-        { senderId: 1, receiverId: 0, text: 'Hi', date: 1616434910000 },
-        { senderId: 0, receiverId: 1, text: 'Sup', date: 1616434926000 },
-        { senderId: 2, receiverId: 0, text: 'Hello', date: 1616434920000 },
-        { senderId: 0, receiverId: 3, text: 'Good morning', date: 1616434923000 },
-        { senderId: 4, receiverId: 0, text: 'Hola', date: 1616434914000 }
+        { senderId: 1, receiverId: 0, text: 'Hi', time: 1616434910 },
+        { senderId: 0, receiverId: 1, text: 'Sup', time: 1616434926 },
+        { senderId: 2, receiverId: 0, text: 'Hello', time: 1616434920 },
+        { senderId: 0, receiverId: 3, text: 'Good morning', time: 1616434923 },
+        { senderId: 4, receiverId: 0, text: 'Hola', time: 1616434914 }
       ]
     },
     mutations: {
@@ -56,7 +57,7 @@ new Vue({
           senderId: state.currentId,
           receiverId: state.companionId,
           text,
-          date: Date.now()
+          time: state.time
         })
       },
       setCompanion(state, { id }) {
@@ -69,7 +70,7 @@ new Vue({
             !(senderId === state.companionId && receiverId === state.currentId)
         )
         state.companionId = -1
-      }
+      },
     }
   }),
   render: (h) => h(App)

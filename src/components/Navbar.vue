@@ -9,7 +9,7 @@
         <button class="button" @click="searching = true">
           <img src="../resources/search.svg" />
         </button>
-        <button class="button user">
+        <button class="button user" @click="popup = true">
           <img
             class="avatar"
             :src="$store.state.users[$store.state.currentId].avatar"
@@ -32,8 +32,18 @@
         @click="$parent.setCompanion(chat.id)"
       >
         <img class="avatar" :src="chat.avatar" alt="user's avatar" />
-        <h3 class="name">{{ chat.name }}</h3>
+        <div class="link">
+          <h3 class="name">{{ chat.name }}</h3>
+          <p></p>
+        </div>
       </button>
+    </div>
+    <div v-if="popup" class="overlay" @click="popup = false">
+      <div class="menu">
+        <button class="button">Profile</button>
+        <button class="button">Settings</button>
+        <button class="button">Add contact</button>
+      </div>
     </div>
   </nav>
 </template>
@@ -42,7 +52,8 @@ export default {
   data() {
     return {
       searchBy: '',
-      searching: false
+      searching: false,
+      popup: false
     }
   },
   methods: {
@@ -63,6 +74,7 @@ export default {
           chat.name.toLowerCase().includes(this.searchBy.toLowerCase())
         )
       }
+      chats = chats.map((chat) => chat.last)
       return chats.filter((value, index, self) => self.indexOf(value) === index)
     }
   }
@@ -70,13 +82,19 @@ export default {
 </script>
 <style scoped>
 .navbar {
-  width: 100%;
-  max-width: 300px;
+  width: 30%;
+  max-width: 500px;
   border-right: 1px solid gainsboro;
+  position: relative;
 }
 .chats {
   height: calc(100% - 50px);
   overflow-y: auto;
+}
+
+.link {
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 500px) {

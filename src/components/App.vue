@@ -10,17 +10,31 @@ import Navbar from './Navbar'
 import Chat from './Chat'
 export default {
   created() {
-    window.addEventListener('resize', () => (this.$store.state.width = window.innerWidth))
+    window.addEventListener('resize', this.setWidth)
   },
   destroyed() {
-    window.removeEventListener('resize', () => (this.$store.state.width = window.innerWidth))
+    window.removeEventListener('resize', this.setWidth)
   },
   name: 'App',
   components: { Navbar, Chat },
   methods: {
+    setWidth() {
+      this.$store.state.width = window.innerWidth
+    },
     setCompanion(id) {
       this.$store.commit('setCompanion', { id })
-    }
+    },
+    getTime(time) {
+      const date = new Date(time * 1000)
+      return date.toLocaleString('en-GB', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit'
+      })
+    },
+    getDate() {}
   }
 }
 </script>
@@ -45,17 +59,21 @@ button {
 }
 
 main {
-  max-width: 1000px;
-  margin: 0 auto;
   height: 100vh;
   border-left: 1px solid gainsboro;
   border-right: 1px solid gainsboro;
   display: flex;
+  position: relative;
 }
 
 .flex {
   display: flex;
   align-items: center;
+  width: 100%;
+}
+
+.center {
+  margin: auto;
 }
 
 .user {
@@ -66,7 +84,7 @@ main {
 }
 
 .name {
-  margin-left: 10px;
+  margin: 10px;
 }
 
 .avatar {
@@ -103,20 +121,32 @@ main {
   padding: 0 10px;
 }
 
-.overlay {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: 100;
-}
-
 .menu {
   background-color: white;
   border: 1px solid gainsboro;
   width: 200px;
-  margin: 10px 10px 10px auto;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  top: 10px;
+  right: 10px;
+  z-index: 20;
+}
+
+.text_dimmed {
+  color: grey;
+  font-size: 13px;
+  justify-self: end;
+  align-self: end;
+}
+
+.overlay {
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
 @media (min-width: 500px) {
