@@ -1,11 +1,8 @@
 <template>
-  <nav
-    class="navbar"
-    v-if="($store.state.width < 500 && $store.state.companionId < 0) || $store.state.width > 500"
-  >
+  <nav class="navbar" v-if="$store.state.width > 500">
     <header class="header">
-      <h1 v-if="!searching">Chats</h1>
-      <div class="flex" v-if="!searching">
+      <h1 v-if="!searching">Messenger</h1>
+      <div class="flex right" v-if="!searching">
         <button class="button" @click="searching = true">
           <img src="../resources/search.svg" />
         </button>
@@ -25,24 +22,28 @@
       </div>
     </header>
     <div class="chats">
-      <button
+      <router-link
         class="user"
         v-for="chat in getChats()"
         :key="chat.id"
-        @click="$parent.setCompanion(chat.id)"
+        :to="{ path: '/chat/' + chat.id }"
       >
         <img class="avatar" :src="chat.avatar" alt="user's avatar" />
         <div class="link">
           <h3 class="name">{{ chat.name }}</h3>
-          <p></p>
+          <div class="flex">
+            <p class="last">{{ chat.lastMessage }}</p>
+            <p class="last">{{ $parent.getTime(chat.lastTime) }}</p>
+          </div>
         </div>
-      </button>
+      </router-link>
     </div>
     <div v-if="popup" class="overlay" @click="popup = false">
       <div class="menu">
         <button class="button">Profile</button>
         <button class="button">Settings</button>
         <button class="button">Add contact</button>
+        <button class="button">Logout</button>
       </div>
     </div>
   </nav>
@@ -74,7 +75,10 @@ export default {
           chat.name.toLowerCase().includes(this.searchBy.toLowerCase())
         )
       }
-      chats = chats.map((chat) => chat.last)
+      chats.map((chat) => {
+        chat.lastMessage = this.$parent.getMessages(chat.id)[length].text
+        chat.lastTime = this.$parent.getMessages(chat.id)[length].time
+      })
       return chats.filter((value, index, self) => self.indexOf(value) === index)
     }
   }
@@ -97,6 +101,11 @@ export default {
   flex-direction: column;
 }
 
+.last {
+  color: grey;
+  margin-left: 10px;
+  font-size: 15px;
+}
 @media (max-width: 500px) {
   .navbar {
     max-width: 100%;

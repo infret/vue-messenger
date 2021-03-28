@@ -1,13 +1,12 @@
 <template>
   <main>
     <Navbar />
-    <Chat />
+    <router-view></router-view>
   </main>
 </template>
 
 <script>
 import Navbar from './Navbar'
-import Chat from './Chat'
 export default {
   created() {
     window.addEventListener('resize', this.setWidth)
@@ -16,25 +15,49 @@ export default {
     window.removeEventListener('resize', this.setWidth)
   },
   name: 'App',
-  components: { Navbar, Chat },
+  components: { Navbar },
   methods: {
     setWidth() {
       this.$store.state.width = window.innerWidth
     },
-    setCompanion(id) {
-      this.$store.commit('setCompanion', { id })
+    getTime(seconds) {
+      const time = new Date(seconds * 1000)
+      return time
+        .toLocaleString('en-GB', {
+          hour: 'numeric',
+          minute: '2-digit'
+        })
+        .split(' ')
+        .pop()
     },
-    getTime(time) {
-      const date = new Date(time * 1000)
-      return date.toLocaleString('en-GB', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric',
+    getDate(seconds) {
+      const time = new Date(seconds * 1000)
+      return time.toLocaleString('en-GB', {
         hour: 'numeric',
         minute: '2-digit'
       })
     },
-    getDate() {}
+    getMessages(id) {
+      let messages = []
+      this.$store.state.messages.map(
+        (message) =>
+          message.senderId === this.$store.state.currentId &&
+          message.receiverId === id &&
+          messages.push(message)
+      )
+      this.$store.state.messages.map(
+        (message) =>
+          message.senderId === id &&
+          message.receiverId === this.$store.state.currentId &&
+          messages.push(message)
+      )
+      if (this.$store.state.searchMessages) {
+        messages = messages.filter((message) =>
+          message.text.toLowerCase().includes(this.searchBy.toLowerCase())
+        )
+      }
+      return messages.sort((a, b) => b.time - a.time)
+    }
   }
 }
 </script>
@@ -49,12 +72,15 @@ export default {
   background: transparent;
   font-size: 16px;
   font-family: sans-serif;
+  color: black;
+  text-decoration: none;
 }
 
 h1 {
   margin: 10px;
 }
-button {
+button,
+router-link {
   cursor: pointer;
 }
 
@@ -64,12 +90,6 @@ main {
   border-right: 1px solid gainsboro;
   display: flex;
   position: relative;
-}
-
-.flex {
-  display: flex;
-  align-items: center;
-  width: 100%;
 }
 
 .center {
@@ -84,7 +104,7 @@ main {
 }
 
 .name {
-  margin: 10px;
+  margin-left: 10px;
 }
 
 .avatar {
@@ -96,11 +116,20 @@ main {
 
 .header {
   height: 50px;
-  display: grid;
-  grid-auto-flow: column;
+  display: flex;
   border-bottom: 1px solid gainsboro;
   align-items: center;
-  justify-content: space-between;
+  width: 100%;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  width: auto;
+}
+
+.right {
+  margin-left: auto;
 }
 
 .form {
@@ -114,6 +143,7 @@ main {
   height: 100%;
   width: 100%;
   padding: 10px;
+  display: block;
 }
 
 .button {

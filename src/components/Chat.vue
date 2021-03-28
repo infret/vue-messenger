@@ -1,18 +1,14 @@
 <template>
-  <div class="chat" v-if="$store.state.companionId >= 0">
+  <div class="chat">
     <header class="header">
-      <button v-if="!searching" class="button mobile" @click="$parent.setCompanion(-1)">
+      <router-link v-if="!searching" class="button mobile" to="/" exact>
         <img src="../resources/back.svg" />
-      </button>
-      <div class="user" v-if="!searching" @click="profile = $store.state.companionId">
-        <img
-          class="avatar"
-          :src="$store.state.users[$store.state.companionId].avatar"
-          alt="user's avatar"
-        />
-        <h2 class="name">{{ $store.state.users[$store.state.companionId].name }}</h2>
+      </router-link>
+      <div class="user" v-if="!searching" @click="profile = id">
+        <img class="avatar" :src="$store.state.users[id].avatar" alt="user's avatar" />
+        <h2 class="name">{{ $store.state.users[id].name }}</h2>
       </div>
-      <div class="flex" v-if="!searching">
+      <div class='flex right' v-if="!searching">
         <button class="button" @click="searching = true">
           <img src="../resources/search.svg" />
         </button>
@@ -24,23 +20,23 @@
         <button class="button" @click="searching = false">
           <img src="../resources/back.svg" />
         </button>
-        <input class="input" v-model="searchBy" placeholder="Search messages" />
+        <input class="input" v-model="$store.state.searchMessages" placeholder="Search messages" />
       </div>
     </header>
     <div class="messages">
-      <div class="message" v-for="message in getMessages()" :key="message.id">
+      <div class="message" v-for="message in $parent.getMessages(id)" :key="message.id">
         <div
           class="bubble"
           :class="message.senderId === $store.state.currentId && 'bubble_current'"
         >
           {{ message.text }}
           <p class="text_dimmed">
-            {{ $parent.getTime(message.time).split(' ').pop() }}
+            {{ $parent.getTime(message.time) }}
           </p>
         </div>
       </div>
     </div>
-    <form class="form" @submit.prevent="addMessage(value)">
+    <form class="form" @submit.prevent="addMessage(value, id)">
       <input class="input" type="text" v-model="value" placeholder="Enter message" />
       <button type="submit" class="button">
         <img src="../resources/send.svg" />
@@ -48,23 +44,16 @@
     </form>
     <div v-if="popup" class="overlay" @click="popup = false"></div>
     <div v-if="popup" class="menu">
-      <button class="button" @click="clearChat()">Clear chat</button>
+      <button class="button" @click="clearChat(id)">Clear chat</button>
       <button class="button">Select messages</button>
     </div>
     <div v-if="profile >= 0" class="overlay" @click="profile = -1">
       <div class="profile">
-        <img
-          class="avatar_big"
-          :src="$store.state.users[$store.state.companionId].avatar"
-          alt="user's avatar"
-        />
-        <h2 class="name">{{ $store.state.users[$store.state.companionId].name }}</h2>
-        <p class="text_dimmed">id{{ $store.state.users[$store.state.companionId].id }}</p>
+        <img class="avatar_big" :src="$store.state.users[id].avatar" alt="user's avatar" />
+        <h2 class="name">{{ $store.state.users[id].name }}</h2>
+        <p class="text_dimmed">id{{ $store.state.users[id].id }}</p>
       </div>
     </div>
-  </div>
-  <div v-else class="flex">
-    <h2 class="center">Select chat</h2>
   </div>
 </template>
 <script>
@@ -72,42 +61,26 @@ export default {
   data() {
     return {
       value: '',
-      searchBy: '',
       searching: false,
       profile: -1,
       popup: false
     }
   },
   methods: {
-    addMessage(text) {
-      this.$store.commit('addMessage', { text })
+    addMessage(text, id) {
+      this.$store.commit('addMessage', { text, id })
       this.value = ''
     },
-    getMessages() {
-      let messages = []
-      this.$store.state.messages.map(
-        (message) =>
-          message.senderId === this.$store.state.currentId &&
-          message.receiverId === this.$store.state.companionId &&
-          messages.push(message)
-      )
-      this.$store.state.messages.map(
-        (message) =>
-          message.senderId === this.$store.state.companionId &&
-          message.receiverId === this.$store.state.currentId &&
-          messages.push(message)
-      )
-      if (this.searchBy) {
-        messages = messages.filter((message) =>
-          message.text.toLowerCase().includes(this.searchBy.toLowerCase())
-        )
-      }
-      //  messages.forEach((message, index ) => )
-      return messages.sort((a, b) => b.time - a.time)
-    },
-    clearChat() {
-      this.$store.commit('clearChat')
+    clearChat(id) {
+      this.$store.commit('clearChat', { id })
       this.$store.commit('toggleOverlay')
+    }
+  },
+  computed: {
+    id: function() {
+      return parseInt(
+        window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1)
+      )
     }
   }
 }
