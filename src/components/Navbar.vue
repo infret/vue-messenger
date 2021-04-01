@@ -1,5 +1,8 @@
 <template>
-  <nav class="navbar" v-if="$store.state.width > 500">
+  <nav
+    class="navbar"
+    v-if="($store.state.width < 500 && $store.state.companionId < 0) || $store.state.width > 500"
+  >
     <header class="header">
       <h1 v-if="!searching">Messenger</h1>
       <div class="flex right" v-if="!searching">
@@ -22,11 +25,11 @@
       </div>
     </header>
     <div class="chats">
-      <router-link
+      <button
         class="user"
         v-for="chat in getChats()"
         :key="chat.id"
-        :to="{ path: '/chat/' + chat.id }"
+        @click="$parent.setCompanion(chat.id)"
       >
         <img class="avatar" :src="chat.avatar" alt="user's avatar" />
         <div class="link">
@@ -36,7 +39,7 @@
             <p class="last">{{ $parent.getTime(chat.lastTime) }}</p>
           </div>
         </div>
-      </router-link>
+      </button>
     </div>
     <div v-if="popup" class="overlay" @click="popup = false">
       <div class="menu">
@@ -57,8 +60,9 @@ export default {
       popup: false
     }
   },
-  methods: {
+  computed: {
     getChats() {
+      console.log(this.$parent)
       let chats = []
       this.$store.state.messages.map(
         (message) =>

@@ -1,15 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import router from './router'
 import App from './components/App.vue'
 Vue.config.productionTip = false
 Vue.use(Vuex)
 
 new Vue({
-  router,
   store: new Vuex.Store({
     state: {
       currentId: 0,
+      companionId: 0,
       width: window.innerWidth,
       searchMessages: '',
       users: [
@@ -53,19 +52,22 @@ new Vue({
       ]
     },
     mutations: {
-      addMessage(state, { text, id }) {
+      addMessage(state, { text }) {
         state.messages.push({
           senderId: state.currentId,
-          receiverId: id,
+          receiverId: state.companionId,
           text,
           time: Date.now() / 1000
         })
       },
-      clearChat(state, { id }) {
+      setCompanion(state, { id }) {
+        state.companionId = id
+      },
+      clearChat(state) {
         state.messages = state.messages.filter(
           ({ senderId, receiverId }) =>
-            !(senderId === state.currentId && receiverId === id) &&
-            !(senderId === id && receiverId === state.currentId)
+            !(senderId === state.currentId && receiverId === state.companionId) &&
+            !(senderId === state.companionId && receiverId === state.currentId)
         )
       }
     }

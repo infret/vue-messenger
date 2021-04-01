@@ -1,14 +1,18 @@
 <template>
-  <div class="chat">
+  <div class="chat" v-if="$store.state.companionId >= 0">
     <header class="header">
-      <router-link v-if="!searching" class="button mobile" to="/" exact>
+      <button v-if="!searching" class="button mobile" @click="$parent.setCompanion(-1)">
         <img src="../resources/back.svg" />
-      </router-link>
-      <div class="user" v-if="!searching" @click="profile = id">
-        <img class="avatar" :src="$store.state.users[id].avatar" alt="user's avatar" />
-        <h2 class="name">{{ $store.state.users[id].name }}</h2>
+      </button>
+      <div class="user" v-if="!searching" @click="profile = $store.state.companionId">
+        <img
+          class="avatar"
+          :src="$store.state.users[[$store.state.companionId]].avatar"
+          alt="user's avatar"
+        />
+        <h2 class="name">{{ $store.state.users[[$store.state.companionId]].name }}</h2>
       </div>
-      <div class='flex right' v-if="!searching">
+      <div class="flex right" v-if="!searching">
         <button class="button" @click="searching = true">
           <img src="../resources/search.svg" />
         </button>
@@ -24,7 +28,7 @@
       </div>
     </header>
     <div class="messages">
-      <div class="message" v-for="message in $parent.getMessages(id)" :key="message.id">
+      <div class="message" v-for="message in $parent.getMessages($store.state.companionId)" :key="message.id">
         <div
           class="bubble"
           :class="message.senderId === $store.state.currentId && 'bubble_current'"
@@ -44,16 +48,23 @@
     </form>
     <div v-if="popup" class="overlay" @click="popup = false"></div>
     <div v-if="popup" class="menu">
-      <button class="button" @click="clearChat(id)">Clear chat</button>
+      <button class="button" @click="clearChat()">Clear chat</button>
       <button class="button">Select messages</button>
     </div>
     <div v-if="profile >= 0" class="overlay" @click="profile = -1">
       <div class="profile">
-        <img class="avatar_big" :src="$store.state.users[id].avatar" alt="user's avatar" />
-        <h2 class="name">{{ $store.state.users[id].name }}</h2>
-        <p class="text_dimmed">id{{ $store.state.users[id].id }}</p>
+        <img
+          class="avatar_big"
+          :src="$store.state.users[$store.state.companionId].avatar"
+          alt="user's avatar"
+        />
+        <h2 class="name">{{ $store.state.users[$store.state.companionId].name }}</h2>
+        <p class="text_dimmed">id{{ $store.state.users[$store.state.companionId].id }}</p>
       </div>
     </div>
+  </div>
+  <div v-else class="flex">
+    <h2 class="center">Select chat</h2>
   </div>
 </template>
 <script>
@@ -67,20 +78,13 @@ export default {
     }
   },
   methods: {
-    addMessage(text, id) {
-      this.$store.commit('addMessage', { text, id })
+    addMessage(text) {
+      this.$store.commit('addMessage', { text })
       this.value = ''
     },
-    clearChat(id) {
-      this.$store.commit('clearChat', { id })
+    clearChat() {
+      this.$store.commit('clearChat')
       this.$store.commit('toggleOverlay')
-    }
-  },
-  computed: {
-    id: function() {
-      return parseInt(
-        window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1)
-      )
     }
   }
 }

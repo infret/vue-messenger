@@ -1,12 +1,13 @@
 <template>
   <main>
     <Navbar />
-    <router-view></router-view>
+    <Chat />
   </main>
 </template>
 
 <script>
 import Navbar from './Navbar'
+import Chat from './Chat'
 export default {
   created() {
     window.addEventListener('resize', this.setWidth)
@@ -15,10 +16,13 @@ export default {
     window.removeEventListener('resize', this.setWidth)
   },
   name: 'App',
-  components: { Navbar },
+  components: { Navbar, Chat },
   methods: {
     setWidth() {
       this.$store.state.width = window.innerWidth
+    },
+    setCompanion(id) {
+      this.$store.commit('setCompanion', { id })
     },
     getTime(seconds) {
       const time = new Date(seconds * 1000)
@@ -51,7 +55,7 @@ export default {
           message.receiverId === this.$store.state.currentId &&
           messages.push(message)
       )
-      if (this.$store.state.searchMessages) {
+      if (this.searchBy) {
         messages = messages.filter((message) =>
           message.text.toLowerCase().includes(this.searchBy.toLowerCase())
         )
@@ -79,8 +83,7 @@ export default {
 h1 {
   margin: 10px;
 }
-button,
-router-link {
+button {
   cursor: pointer;
 }
 
