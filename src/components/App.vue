@@ -2,12 +2,14 @@
   <main>
     <Navbar />
     <Chat />
+    <Profile />
   </main>
 </template>
 
 <script>
 import Navbar from './Navbar'
 import Chat from './Chat'
+import Profile from './Profile'
 export default {
   created() {
     window.addEventListener('resize', this.setWidth)
@@ -16,13 +18,16 @@ export default {
     window.removeEventListener('resize', this.setWidth)
   },
   name: 'App',
-  components: { Navbar, Chat },
+  components: { Navbar, Chat, Profile },
   methods: {
     setWidth() {
       this.$store.state.width = window.innerWidth
     },
     setCompanion(id) {
       this.$store.commit('setCompanion', { id })
+    },
+    openProfile(id) {
+      this.$store.commit('openProfile', { id })
     },
     getTime(seconds) {
       const time = new Date(seconds * 1000)
@@ -55,9 +60,9 @@ export default {
           message.receiverId === this.$store.state.currentId &&
           messages.push(message)
       )
-      if (this.searchBy) {
+      if (this.$store.state.searchMessages) {
         messages = messages.filter((message) =>
-          message.text.toLowerCase().includes(this.searchBy.toLowerCase())
+          message.text.toLowerCase().includes(this.$store.state.searchMessages.toLowerCase())
         )
       }
       return messages.sort((a, b) => b.time - a.time)
@@ -108,6 +113,8 @@ main {
 
 .name {
   margin-left: 10px;
+  text-align: left;
+  display: inline;
 }
 
 .avatar {
@@ -128,18 +135,13 @@ main {
 .flex {
   display: flex;
   align-items: center;
-  width: auto;
-}
-
-.right {
-  margin-left: auto;
+  width: 100%;
 }
 
 .form {
   height: 50px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
 
 .input {
@@ -147,6 +149,10 @@ main {
   width: 100%;
   padding: 10px;
   display: block;
+}
+
+.buttons {
+  display: flex;
 }
 
 .button {
@@ -167,11 +173,14 @@ main {
   z-index: 20;
 }
 
-.text_dimmed {
+.dim {
   color: grey;
   font-size: 13px;
-  justify-self: end;
-  align-self: end;
+  margin-left: 10px;
+}
+
+.spacer {
+  justify-content: space-between;
 }
 
 .overlay {
@@ -180,6 +189,10 @@ main {
   position: absolute;
   width: 100%;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #00000055;
 }
 
 @media (min-width: 500px) {

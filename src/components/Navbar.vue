@@ -3,20 +3,16 @@
     class="navbar"
     v-if="($store.state.width < 500 && $store.state.companionId < 0) || $store.state.width > 500"
   >
-    <header class="header">
-      <h1 v-if="!searching">Messenger</h1>
-      <div class="flex right" v-if="!searching">
-        <button class="button" @click="searching = true">
-          <img src="../resources/search.svg" />
-        </button>
+    <header class="header spacer">
+      <div class="flex" v-if="!searching">
         <button class="button user" @click="popup = true">
-          <img
-            class="avatar"
-            :src="$store.state.users[$store.state.currentId].avatar"
-            alt="your avatar"
-          />
+          <img src="../resources/menu.svg" />
+          <h1>Messenger</h1>
         </button>
       </div>
+      <button v-if="!searching" class="button" @click="searching = true">
+        <img src="../resources/search.svg" />
+      </button>
       <div class="flex" v-else>
         <button class="button" @click="searching = false">
           <img src="../resources/back.svg" />
@@ -42,8 +38,8 @@
       </button>
     </div>
     <div v-if="popup" class="overlay" @click="popup = false">
-      <div class="menu">
-        <button class="button">Profile</button>
+      <div class="menu menu_left">
+        <button class="button" @click="$parent.openProfile($store.state.currentId)">Profile</button>
         <button class="button">Settings</button>
         <button class="button">Add contact</button>
         <button class="button">Logout</button>
@@ -60,9 +56,8 @@ export default {
       popup: false
     }
   },
-  computed: {
+  methods: {
     getChats() {
-      console.log(this.$parent)
       let chats = []
       this.$store.state.messages.map(
         (message) =>
@@ -91,10 +86,16 @@ export default {
 <style scoped>
 .navbar {
   width: 30%;
-  max-width: 500px;
+  min-width: 300px;
   border-right: 1px solid gainsboro;
-  position: relative;
 }
+
+.menu_left {
+  position: relative;
+  left: calc(-50% + 110px);
+  top: calc(-50% + 110px);
+}
+
 .chats {
   height: calc(100% - 50px);
   overflow-y: auto;
@@ -112,7 +113,7 @@ export default {
 }
 @media (max-width: 500px) {
   .navbar {
-    max-width: 100%;
+    width: 100%;
   }
 }
 </style>
