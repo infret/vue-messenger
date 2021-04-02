@@ -10,6 +10,7 @@ new Vue({
       currentId: 0,
       companionId: -1,
       openedProfile: -1,
+      openedSettings: true,
       width: window.innerWidth,
       searchMessages: '',
       users: [
@@ -69,6 +70,9 @@ new Vue({
       },
       setCompanion(state, { id }) {
         state.companionId = id
+      },
+      toggleSettings(state) {
+        state.openedSettings = !state.openedSettings
       },
       openProfile(state, { id }) {
         state.openedProfile = id

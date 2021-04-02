@@ -40,7 +40,7 @@
     <div v-if="popup" class="overlay" @click="popup = false">
       <div class="menu menu_left">
         <button class="button" @click="$parent.openProfile($store.state.currentId)">Profile</button>
-        <button class="button">Settings</button>
+        <button class="button" @click="$parent.toggleSettings()">Settings</button>
         <button class="button">Add contact</button>
         <button class="button">Logout</button>
       </div>

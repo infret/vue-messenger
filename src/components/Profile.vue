@@ -1,6 +1,6 @@
 <template>
   <div v-if="$store.state.openedProfile >= 0" class="overlay" @click="$parent.openProfile(-1)">
-    <div class="profile">
+    <div class="popup">
       <img
         class="avatar_big"
         :src="$store.state.users[$store.state.openedProfile].avatar"
@@ -17,13 +17,7 @@
   </div>
 </template>
 <style scoped>
-.profile {
-  width: 300px;
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-  border: 1px solid gainsboro;
-}
+
 
 .avatar_big {
   height: 300px;

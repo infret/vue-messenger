@@ -3,6 +3,7 @@
     <Navbar />
     <Chat />
     <Profile />
+    <Settings />
   </main>
 </template>
 
@@ -10,6 +11,7 @@
 import Navbar from './Navbar'
 import Chat from './Chat'
 import Profile from './Profile'
+import Settings from './Settings'
 export default {
   created() {
     window.addEventListener('resize', this.setWidth)
@@ -18,7 +20,7 @@ export default {
     window.removeEventListener('resize', this.setWidth)
   },
   name: 'App',
-  components: { Navbar, Chat, Profile },
+  components: { Navbar, Chat, Profile, Settings },
   methods: {
     setWidth() {
       this.$store.state.width = window.innerWidth
@@ -28,6 +30,9 @@ export default {
     },
     openProfile(id) {
       this.$store.commit('openProfile', { id })
+    },
+    toggleSettings() {
+      this.$store.commit('toggleSettings')
     },
     getTime(seconds) {
       const time = new Date(seconds * 1000)
@@ -193,6 +198,13 @@ main {
   justify-content: center;
   align-items: center;
   background-color: #00000055;
+}
+
+.popup {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
 }
 
 @media (min-width: 500px) {
