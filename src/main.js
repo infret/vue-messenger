@@ -53,10 +53,10 @@ new Vue({
         }
       ],
       messages: [
-        { senderId: 1, receiverId: 0, text: 'Hi', time: 1616434910 },
-        { senderId: 0, receiverId: 1, text: 'Sup', time: 1616434926 },
-        { senderId: 2, receiverId: 0, text: 'Hello', time: 1616434920 },
-        { senderId: 0, receiverId: 3, text: 'Good morning', time: 1616434923 },
+        { senderId: 1, receiverId: 0, text: 'Hi', time: 1616434910000 },
+        { senderId: 0, receiverId: 1, text: 'Sup', time: 1616450000000 },
+        { senderId: 2, receiverId: 0, text: 'Hello', time: 1616434920000 },
+        { senderId: 0, receiverId: 3, text: 'Good morning', time: 1616434923000 },
         { senderId: 4, receiverId: 0, text: 'Hola', time: 1616434914 }
       ],
       chats: []
@@ -67,7 +67,7 @@ new Vue({
           senderId: state.currentId,
           receiverId: state.companionId,
           text,
-          time: Date.now() / 1000
+          time: Date.now()
         })
       },
       setCompanion(state, { id }) {
@@ -91,7 +91,7 @@ new Vue({
         )
         state.setCompanion(-1)
       },
-      setDraft(state, {text}){
+      setDraft(state, { text }) {
         state.chats.filter((chat) => chat.id === state.companionId)[0].draft = text
       }
     }

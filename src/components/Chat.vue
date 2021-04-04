@@ -30,17 +30,21 @@
     <div class="messages">
       <div
         class="message"
-        v-for="message in $parent.getMessages($store.state.companionId)"
-        :key="message.id"
+        v-for="(message, index) in $parent.getMessages($store.state.companionId)"
+        :key="index"
       >
         <div
+          v-if="typeof message !== 'string'"
           class="bubble"
           :class="message.senderId === $store.state.currentId && 'bubble_current'"
         >
           {{ message.text }}
-          <p class="dim">
+          <p class="dim time">
             {{ $parent.getTime(message.time) }}
           </p>
+        </div>
+        <div v-else class="date">
+          {{ message }}
         </div>
       </div>
     </div>
@@ -78,20 +82,19 @@ export default {
     return {
       searching: false,
       profile: -1,
-      popup: false,
+      popup: false
     }
   },
   methods: {
     addMessage(text) {
       text && this.$store.commit('addMessage', { text })
       this.$store.commit('setDraft', { text: '' })
-      console.log(this.$store.state.chats)
     },
     clearChat() {
       this.$store.commit('clearChat')
       this.$store.commit('toggleOverlay')
     }
-  },
+  }
 }
 </script>
 <style scoped>
@@ -106,7 +109,7 @@ export default {
   height: calc(100% - 100px);
   overflow-y: auto;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
 }
 
 .message {
@@ -133,5 +136,16 @@ export default {
 .bubble_current {
   margin-left: auto;
   background-color: #f1f1f1;
+}
+
+.date {
+  text-align: center;
+  width: 100%;
+  margin: 10px 0;
+  color: grey;
+}
+
+.time {
+  align-self: end;
 }
 </style>

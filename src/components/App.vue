@@ -39,8 +39,8 @@ export default {
     toggleContactDialog() {
       this.$store.commit('toggleContactDialog')
     },
-    getTime(seconds) {
-      const time = new Date(seconds * 1000)
+    getTime(ms) {
+      const time = new Date(ms)
       return time
         .toLocaleString('en-GB', {
           hour: 'numeric',
@@ -49,12 +49,9 @@ export default {
         .split(' ')
         .pop()
     },
-    getDate(seconds) {
-      const time = new Date(seconds * 1000)
-      return time.toLocaleString('en-GB', {
-        hour: 'numeric',
-        minute: '2-digit'
-      })
+    getDate(ms) {
+      const time = new Date(ms)
+      return time.toLocaleString('en-GB', { month: 'short', day: 'numeric' })
     },
     getMessages(id) {
       let messages = []
@@ -75,7 +72,18 @@ export default {
           message.text.toLowerCase().includes(this.$store.state.searchMessages.toLowerCase())
         )
       }
-      return messages.sort((a, b) => b.time - a.time)
+      messages = messages.sort((a, b) => a.time - b.time)
+      let lastDate = this.getDate(messages[0].time)
+      let chunks = [lastDate]
+      for (let i = 0; i < messages.length; i++) {
+        if (this.getDate(messages[i].time) === lastDate) {
+          chunks.push(messages[i])
+        } else {
+          lastDate = this.getDate(messages[i].time)
+          chunks.push(lastDate, messages[i])
+        }
+      }
+      return chunks
     }
   }
 }
@@ -122,7 +130,7 @@ main {
 }
 
 .name {
-  margin-left: 10px;
+  margin: 0 10px;
   text-align: left;
   display: inline;
 }
@@ -186,7 +194,6 @@ main {
 .dim {
   color: grey;
   font-size: 13px;
-  margin-left: 10px;
 }
 
 .spacer {
