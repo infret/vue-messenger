@@ -17,7 +17,7 @@
         <button class="button" @click="searching = false">
           <img src="../resources/back.svg" />
         </button>
-        <input class="input" v-model="searchBy" placeholder="Search chats" />
+        <input class="input" v-model="$store.state.searchChats" placeholder="Search chats" />
       </div>
     </header>
     <div class="chats">
@@ -51,7 +51,6 @@
 export default {
   data() {
     return {
-      searchBy: '',
       searching: false,
       popup: false
     }
@@ -69,9 +68,9 @@ export default {
           message.senderId === this.$store.state.currentId &&
           chats.push(this.$store.state.users[message.receiverId])
       )
-      if (this.searchBy) {
+      if (this.$store.state.searchChats) {
         chats = chats.filter((chat) =>
-          chat.name.toLowerCase().includes(this.searchBy.toLowerCase())
+          chat.name.toLowerCase().includes(this.$store.state.searchChats.toLowerCase())
         )
       }
       chats.map((chat) => {

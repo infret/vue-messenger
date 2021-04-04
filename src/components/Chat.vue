@@ -44,8 +44,20 @@
         </div>
       </div>
     </div>
-    <form class="form spacer" @submit.prevent="addMessage(value)">
-      <input class="input" type="text" v-model="value" placeholder="Enter message" />
+    <form
+      class="form spacer"
+      @submit.prevent="
+        addMessage(
+          $store.state.chats.filter((chat) => chat.id === $store.state.companionId)[0].draft
+        )
+      "
+    >
+      <input
+        class="input"
+        type="text"
+        v-model="$store.state.chats.filter((chat) => chat.id === $store.state.companionId)[0].draft"
+        placeholder="Enter message"
+      />
       <button type="submit" class="button">
         <img src="../resources/send.svg" />
       </button>
@@ -64,22 +76,22 @@
 export default {
   data() {
     return {
-      value: '',
       searching: false,
       profile: -1,
-      popup: false
+      popup: false,
     }
   },
   methods: {
     addMessage(text) {
       text && this.$store.commit('addMessage', { text })
-      this.value = ''
+      this.$store.commit('setDraft', { text: '' })
+      console.log(this.$store.state.chats)
     },
     clearChat() {
       this.$store.commit('clearChat')
       this.$store.commit('toggleOverlay')
     }
-  }
+  },
 }
 </script>
 <style scoped>

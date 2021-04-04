@@ -10,8 +10,10 @@ new Vue({
       currentId: 0,
       companionId: -1,
       openedProfile: -1,
-      openedSettings: true,
+      openedSettings: false,
+      openedContact: false,
       width: window.innerWidth,
+      searchChats: '',
       searchMessages: '',
       users: [
         {
@@ -70,9 +72,13 @@ new Vue({
       },
       setCompanion(state, { id }) {
         state.companionId = id
+        state.chats.push({ id: state.companionId })
       },
       toggleSettings(state) {
         state.openedSettings = !state.openedSettings
+      },
+      toggleContactDialog(state) {
+        state.openedContact = !state.openedContact
       },
       openProfile(state, { id }) {
         state.openedProfile = id
@@ -83,6 +89,10 @@ new Vue({
             !(senderId === state.currentId && receiverId === state.companionId) &&
             !(senderId === state.companionId && receiverId === state.currentId)
         )
+        state.setCompanion(-1)
+      },
+      setDraft(state, {text}){
+        state.chats.filter((chat) => chat.id === state.companionId)[0].draft = text
       }
     }
   }),

@@ -4,6 +4,7 @@
     <Chat />
     <Profile />
     <Settings />
+    <ContactDialog />
   </main>
 </template>
 
@@ -12,6 +13,7 @@ import Navbar from './Navbar'
 import Chat from './Chat'
 import Profile from './Profile'
 import Settings from './Settings'
+import ContactDialog from './ContactDialog'
 export default {
   created() {
     window.addEventListener('resize', this.setWidth)
@@ -20,7 +22,7 @@ export default {
     window.removeEventListener('resize', this.setWidth)
   },
   name: 'App',
-  components: { Navbar, Chat, Profile, Settings },
+  components: { Navbar, Chat, Profile, Settings, ContactDialog },
   methods: {
     setWidth() {
       this.$store.state.width = window.innerWidth
@@ -33,6 +35,9 @@ export default {
     },
     toggleSettings() {
       this.$store.commit('toggleSettings')
+    },
+    toggleContactDialog() {
+      this.$store.commit('toggleContactDialog')
     },
     getTime(seconds) {
       const time = new Date(seconds * 1000)
