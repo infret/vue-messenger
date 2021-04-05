@@ -41,8 +41,8 @@
       <div class="menu menu_left">
         <button class="button" @click="$parent.openProfile($store.state.currentId)">Profile</button>
         <button class="button" @click="$parent.toggleSettings()">Settings</button>
-        <button class="button">Add contact</button>
-        <button class="button">Logout</button>
+        <button class="button" @click="$parent.toggleContactDialog()">Add contact</button>
+        <button class="button" @click='$parent.loginUser(-1)'>Logout</button>
       </div>
     </div>
   </nav>

@@ -1,11 +1,14 @@
 <template>
-  <main>
-    <Navbar />
-    <Chat />
-    <Profile />
-    <Settings />
-    <ContactDialog />
-  </main>
+  <div>
+    <main v-if='$store.state.currentId >= 0'>
+      <Navbar />
+      <Chat />
+      <Profile />
+      <Settings />
+      <ContactDialog />
+    </main>
+    <Login v-else/>
+  </div>
 </template>
 
 <script>
@@ -14,6 +17,7 @@ import Chat from './Chat'
 import Profile from './Profile'
 import Settings from './Settings'
 import ContactDialog from './ContactDialog'
+import Login from './Login'
 export default {
   created() {
     window.addEventListener('resize', this.setWidth)
@@ -22,8 +26,11 @@ export default {
     window.removeEventListener('resize', this.setWidth)
   },
   name: 'App',
-  components: { Navbar, Chat, Profile, Settings, ContactDialog },
+  components: { Navbar, Chat, Profile, Settings, ContactDialog, Login },
   methods: {
+    loginUser(id){
+      this.$store.commit('loginUser', {id})
+    },
     setWidth() {
       this.$store.state.width = window.innerWidth
     },

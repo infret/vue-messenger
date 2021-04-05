@@ -7,7 +7,7 @@ Vue.use(Vuex)
 new Vue({
   store: new Vuex.Store({
     state: {
-      currentId: 0,
+      currentId: -1,
       companionId: -1,
       openedProfile: -1,
       openedSettings: false,
@@ -69,6 +69,9 @@ new Vue({
           text,
           time: Date.now()
         })
+      },
+      loginUser(state, {id}){
+        state.currentId = id
       },
       setCompanion(state, { id }) {
         state.companionId = id
