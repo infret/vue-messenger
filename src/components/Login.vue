@@ -8,7 +8,7 @@
       </button>
     </form>
     <h2>Register</h2>
-    <form class="field">
+    <form class="field" @submit.prevent="registerUser()">
       <input class="input" type="text" v-model="registerName" placeholder="Enter username" />
       <button type="submit" class="button">
         <img src="../resources/login.svg" />
@@ -33,11 +33,22 @@ export default {
   },
   methods: {
     loginUser() {
-      let user = this.$store.state.users.filter((user) => user.name === this.loginName)[0]
+      let name = this.loginName.toLowerCase()
+      let user = this.$store.state.users.filter((user) => user.name === name)[0]
       if (user) {
-        this.$parent.loginUser(user.id)
+        let id = user.id
+        this.$store.commit('loginUser', { id })
       } else {
         alert('Wrong username')
+      }
+    },
+    registerUser() {
+      let name = this.registerName.toLowerCase()
+      let user = this.$store.state.users.filter((user) => user.name === name)[0]
+      if (user) {
+        alert('User already exists')
+      } else {
+        this.$store.commit('registerUser', { name })
       }
     }
   }

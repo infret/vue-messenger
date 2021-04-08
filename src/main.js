@@ -57,7 +57,7 @@ new Vue({
         { senderId: 0, receiverId: 1, text: 'Sup', time: 1616450000000 },
         { senderId: 2, receiverId: 0, text: 'Hello', time: 1616434920000 },
         { senderId: 0, receiverId: 3, text: 'Good morning', time: 1616434923000 },
-        { senderId: 4, receiverId: 0, text: 'Hola', time: 1616434914 }
+        { senderId: 4, receiverId: 0, text: 'Hola', time: 1616434914000 }
       ],
       chats: []
     },
@@ -70,8 +70,12 @@ new Vue({
           time: Date.now()
         })
       },
-      loginUser(state, {id}){
+      loginUser(state, { id }) {
         state.currentId = id
+      },
+      registerUser(state, { name }) {
+        state.users.push({ id: state.users.length, name: name, avatar: '', status: '' })
+        state.currentId = state.users.length
       },
       setCompanion(state, { id }) {
         state.companionId = id

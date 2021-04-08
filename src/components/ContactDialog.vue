@@ -2,7 +2,7 @@
   <div v-if="$store.state.openedContact" class="overlay" @click="$parent.toggleContactDialog()">
     <div class="popup" @click.stop>
       <h1>Add new contact by id</h1>
-      <form class="form spacer" @submit.prevent="$parent.setCompanion(value)">
+      <form class="form spacer" @submit.prevent="$parent.setCompanion(parseInt(value))">
         <input class="input" type="text" v-model="value" placeholder="Enter contact id" />
         <button type="submit" class="button">
           <img src="../resources/send.svg" />
@@ -11,3 +11,10 @@
     </div>
   </div>
 </template>
+<script>
+export default {
+  data() {
+    return { value: '' }
+  }
+}
+</script>

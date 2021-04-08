@@ -42,7 +42,7 @@
         <button class="button" @click="$parent.openProfile($store.state.currentId)">Profile</button>
         <button class="button" @click="$parent.toggleSettings()">Settings</button>
         <button class="button" @click="$parent.toggleContactDialog()">Add contact</button>
-        <button class="button" @click='$parent.loginUser(-1)'>Logout</button>
+        <button class="button" @click="loginUser(-1)">Logout</button>
       </div>
     </div>
   </nav>
@@ -74,10 +74,17 @@ export default {
         )
       }
       chats.map((chat) => {
-        chat.lastMessage = this.$parent.getMessages(chat.id)[length].text
-        chat.lastTime = this.$parent.getMessages(chat.id)[length].time
+        let messages = this.$parent.getMessages(0)
+        if (messages.length > 0) {
+          chat.lastMessage = messages[messages.length - 1].text
+          chat.lastTime = messages[messages.length - 1].time
+        }
+        console.log(messages)
       })
       return chats.filter((value, index, self) => self.indexOf(value) === index)
+    },
+    loginUser(id) {
+      this.$store.commit('loginUser', { id })
     }
   }
 }

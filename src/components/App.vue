@@ -1,13 +1,13 @@
 <template>
   <div>
-    <main v-if='$store.state.currentId >= 0'>
+    <main v-if="$store.state.currentId >= 0">
       <Navbar />
       <Chat />
       <Profile />
       <Settings />
       <ContactDialog />
     </main>
-    <Login v-else/>
+    <Login v-else />
   </div>
 </template>
 
@@ -28,9 +28,6 @@ export default {
   name: 'App',
   components: { Navbar, Chat, Profile, Settings, ContactDialog, Login },
   methods: {
-    loginUser(id){
-      this.$store.commit('loginUser', {id})
-    },
     setWidth() {
       this.$store.state.width = window.innerWidth
     },
@@ -74,23 +71,26 @@ export default {
           message.receiverId === this.$store.state.currentId &&
           messages.push(message)
       )
-      if (this.$store.state.searchMessages) {
-        messages = messages.filter((message) =>
-          message.text.toLowerCase().includes(this.$store.state.searchMessages.toLowerCase())
-        )
-      }
-      messages = messages.sort((a, b) => a.time - b.time)
-      let lastDate = this.getDate(messages[0].time)
-      let chunks = [lastDate]
-      for (let i = 0; i < messages.length; i++) {
-        if (this.getDate(messages[i].time) === lastDate) {
-          chunks.push(messages[i])
-        } else {
-          lastDate = this.getDate(messages[i].time)
-          chunks.push(lastDate, messages[i])
+      if (messages.length > 0) {
+        if (this.$store.state.searchMessages) {
+          messages = messages.filter((message) =>
+            message.text.toLowerCase().includes(this.$store.state.searchMessages.toLowerCase())
+          )
         }
+        messages = messages.sort((a, b) => a.time - b.time)
+        console.log(messages)
+        let lastDate = this.getDate(messages[0].time)
+        let chunks = [lastDate]
+        for (let i = 0; i < messages.length; i++) {
+          if (this.getDate(messages[i].time) === lastDate) {
+            chunks.push(messages[i])
+          } else {
+            lastDate = this.getDate(messages[i].time)
+            chunks.push(lastDate, messages[i])
+          }
+        }
+        return chunks
       }
-      return chunks
     }
   }
 }
