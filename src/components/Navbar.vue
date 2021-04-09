@@ -40,9 +40,9 @@
     <div v-if="popup" class="overlay" @click="popup = false">
       <div class="menu menu_left">
         <button class="button" @click="$parent.openProfile($store.state.currentId)">Profile</button>
-        <button class="button" @click="$parent.toggleSettings()">Settings</button>
-        <button class="button" @click="$parent.toggleContactDialog()">Add contact</button>
-        <button class="button" @click="loginUser(-1)">Logout</button>
+        <button class="button" @click="$store.commit('toggleSettings')">Settings</button>
+        <button class="button" @click="$store.commit('toggleContact')">Add contact</button>
+        <button class="button" @click="$store.commit('loginUser', -1)">Logout</button>
       </div>
     </div>
   </nav>
@@ -74,17 +74,13 @@ export default {
         )
       }
       chats.map((chat) => {
-        let messages = this.$parent.getMessages(0)
+        let messages = this.$parent.getMessages(chat.id)
         if (messages.length > 0) {
           chat.lastMessage = messages[messages.length - 1].text
           chat.lastTime = messages[messages.length - 1].time
         }
-        console.log(messages)
       })
       return chats.filter((value, index, self) => self.indexOf(value) === index)
-    },
-    loginUser(id) {
-      this.$store.commit('loginUser', { id })
     }
   }
 }

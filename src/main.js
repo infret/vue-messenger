@@ -7,8 +7,8 @@ Vue.use(Vuex)
 new Vue({
   store: new Vuex.Store({
     state: {
-      currentId: -1,
-      companionId: -1,
+      currentId: 0,
+      companionId: 1,
       openedProfile: -1,
       openedSettings: false,
       openedContact: false,
@@ -84,7 +84,7 @@ new Vue({
       toggleSettings(state) {
         state.openedSettings = !state.openedSettings
       },
-      toggleContactDialog(state) {
+      toggleContact(state) {
         state.openedContact = !state.openedContact
       },
       openProfile(state, { id }) {
@@ -99,7 +99,18 @@ new Vue({
         state.setCompanion(-1)
       },
       setDraft(state, { text }) {
-        state.chats.filter((chat) => chat.id === state.companionId)[0].draft = text
+        let chat = state.chats.filter((chat) => chat.id === state.companionId)[0]
+        if (!chat) {
+          state.chats.push({ draft: '', selected: [] })
+        }
+        chat.draft = text
+      },
+      selectMessage(state, { message }) {
+        let chat = state.chats.filter((chat) => chat.id === state.companionId)[0]
+        if (!chat) {
+          state.chats.push({ draft: '', selected: [] })
+        }
+        chat.selected.push(message)
       }
     }
   }),

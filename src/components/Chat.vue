@@ -33,6 +33,14 @@
         v-for="(message, index) in $parent.getMessages($store.state.companionId)"
         :key="index"
       >
+        <label
+          class="checkbox"
+          v-if="typeof message !== 'string' && selecting"
+          @click="$store.commit('selectMessage', { message })"
+          :class="isSelected(message) && 'checkbox_checked'"
+        >
+          <input type="checkbox" />
+        </label>
         <div
           v-if="typeof message !== 'string'"
           class="bubble"
@@ -48,20 +56,8 @@
         </div>
       </div>
     </div>
-    <form
-      class="form spacer"
-      @submit.prevent="
-        addMessage(
-          $store.state.chats.filter((chat) => chat.id === $store.state.companionId)[0].draft
-        )
-      "
-    >
-      <input
-        class="input"
-        type="text"
-        v-model="$store.state.chats.filter((chat) => chat.id === $store.state.companionId)[0].draft"
-        placeholder="Enter message"
-      />
+    <form class="form spacer" @submit.prevent="addMessage(draft)">
+      <input class="input" type="text" v-model="draft" placeholder="Enter message" />
       <button type="submit" class="button">
         <img src="../resources/send.svg" />
       </button>
@@ -69,7 +65,7 @@
     <div v-if="popup" class="overlay" @click="popup = false"></div>
     <div v-if="popup" class="menu">
       <button class="button" @click="clearChat()">Clear chat</button>
-      <button class="button">Select messages</button>
+      <button class="button" @click="toggleSelect()">Select messages</button>
     </div>
   </div>
   <div v-else class="flex">
@@ -82,7 +78,8 @@ export default {
     return {
       searching: false,
       profile: -1,
-      popup: false
+      popup: false,
+      selecting: false
     }
   },
   methods: {
@@ -93,6 +90,22 @@ export default {
     clearChat() {
       this.$store.commit('clearChat')
       this.$store.commit('toggleOverlay')
+    },
+    toggleSelect() {
+      this.selecting = !this.selecting
+    },
+    isSelected(message) {
+      let chat = this.$parent.storeChat()
+      if (chat && chat.selected.includes(message)) {
+        return true
+      } else return false
+    }
+  },
+  computed: {
+    draft: {
+      get() {
+        return this.$parent.storeChat().draft
+      }
     }
   }
 }

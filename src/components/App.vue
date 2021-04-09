@@ -37,12 +37,6 @@ export default {
     openProfile(id) {
       this.$store.commit('openProfile', { id })
     },
-    toggleSettings() {
-      this.$store.commit('toggleSettings')
-    },
-    toggleContactDialog() {
-      this.$store.commit('toggleContactDialog')
-    },
     getTime(ms) {
       const time = new Date(ms)
       return time
@@ -78,7 +72,6 @@ export default {
           )
         }
         messages = messages.sort((a, b) => a.time - b.time)
-        console.log(messages)
         let lastDate = this.getDate(messages[0].time)
         let chunks = [lastDate]
         for (let i = 0; i < messages.length; i++) {
@@ -91,6 +84,17 @@ export default {
         }
         return chunks
       }
+    },
+    storeChat() {
+      let chat = this.$store.state.chats.filter(
+        (chat) => chat.id === this.$store.state.companionId
+      )[0]
+      if (!chat) {
+        this.$store.state.chats.push({ draft: '', selected: [] })
+        return this.$store.state.chats.filter(
+          (chat) => chat.id === this.$store.state.companionId
+        )[0]
+      } else return chat
     }
   }
 }
@@ -113,8 +117,19 @@ export default {
 h1 {
   margin: 10px;
 }
-button {
+button,
+.checkbox > input {
   cursor: pointer;
+}
+
+input {
+  -moz-appearance: textfield;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 main {
@@ -127,6 +142,25 @@ main {
 
 .center {
   margin: auto;
+}
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+
+.checkbox > input {
+  height: 20px;
+  width: 20px;
+  appearance: none;
+  border: 2px solid gainsboro;
+  border-radius: 50%;
+  margin-left: 10px;
+}
+
+.checkbox_checked > input {
+  background-color: grey;
 }
 
 .user {
