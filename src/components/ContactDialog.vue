@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$store.state.openedContact" class="overlay" @click="$store.commit('toggleContact')">
+  <div v-if="$store.state.isContactOpen" class="overlay" @click="$store.commit('toggleContact')">
     <div class="popup" @click.stop>
       <h1>Add new contact by id</h1>
       <form class="form spacer" @submit.prevent="addContact(value)">
@@ -11,6 +11,7 @@
     </div>
   </div>
 </template>
+
 <script>
 export default {
   data() {

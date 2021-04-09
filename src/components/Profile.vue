@@ -1,30 +1,45 @@
 <template>
-  <div v-if="$store.state.openedProfile >= 0" class="overlay" @click="$parent.openProfile(-1)">
+  <div
+    v-if="isShown"
+    class="overlay"
+    @click="$parent.openProfile(-1)"
+  >
     <div class="popup">
       <img
         class="avatar_big"
-        :src="$store.state.users[$store.state.openedProfile].avatar"
+        :src="openedProfileUser.avatar"
         alt="user's avatar"
       />
       <div class="desc">
         <div class="flex">
-          <h2 class="name">{{ $store.state.users[$store.state.openedProfile].name }}</h2>
-          <p class="dim">id{{ $store.state.users[$store.state.openedProfile].id }}</p>
+          <h2 class="name">{{ openedProfileUser.name }}</h2>
+          <p class="dim">id{{ openedProfileUser.id }}</p>
         </div>
-        <p class="name">{{ $store.state.users[$store.state.openedProfile].status }}</p>
+        <p class="name">{{ openedProfileUser.status }}</p>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  computed: {
+    isShown() {
+      return this.$store.state.openedProfile >= 0;
+    },
+    openedProfileUser() {
+      return this.$store.state.users[this.$store.state.openedProfile];
+    }
+  }
+};
+</script>
+
 <style scoped>
-
-
 .avatar_big {
   height: 300px;
   width: 300px;
   object-fit: cover;
 }
-
 .desc {
   padding: 10px 0;
   display: grid;

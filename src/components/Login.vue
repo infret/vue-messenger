@@ -34,17 +34,18 @@ export default {
   methods: {
     loginUser() {
       let name = this.loginName.toLowerCase()
-      let user = this.$store.state.users.filter((user) => user.name === name)[0]
+      let user = this.$store.state.users.find((user) => user.name === name)
+
       if (user) {
-        let id = user.id
-        this.$store.commit('loginUser', { id })
+        this.$store.commit('loginUser', { id: user.id })
       } else {
         alert('Wrong username')
       }
     },
     registerUser() {
       let name = this.registerName.toLowerCase()
-      let user = this.$store.state.users.filter((user) => user.name === name)[0]
+      let user = this.$store.state.users.find((user) => user.name === name)
+
       if (user) {
         alert('User already exists')
       } else {

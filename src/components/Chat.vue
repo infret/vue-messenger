@@ -1,16 +1,26 @@
 <template>
   <div class="chat" v-if="$store.state.companionId >= 0">
     <header class="header spacer">
-      <button v-if="!searching" class="button mobile" @click="$parent.setCompanion(-1)">
+      <button
+        v-if="!searching"
+        class="button mobile"
+        @click="$parent.setCompanion(-1)"
+      >
         <img src="../resources/back.svg" />
       </button>
-      <button class="user" v-if="!searching" @click="$parent.openProfile($store.state.companionId)">
+      <button
+        class="user"
+        v-if="!searching"
+        @click="$parent.openProfile($store.state.companionId)"
+      >
         <img
           class="avatar"
           :src="$store.state.users[[$store.state.companionId]].avatar"
           alt="user's avatar"
         />
-        <h2 class="name">{{ $store.state.users[[$store.state.companionId]].name }}</h2>
+        <h2 class="name">
+          {{ $store.state.users[[$store.state.companionId]].name }}
+        </h2>
       </button>
       <div class="buttons" v-if="!searching">
         <button class="button" @click="searching = true">
@@ -24,27 +34,34 @@
         <button class="button" @click="searching = false">
           <img src="../resources/back.svg" />
         </button>
-        <input class="input" v-model="$store.state.searchMessages" placeholder="Search messages" />
+        <input
+          class="input"
+          v-model="$store.state.searchMessages"
+          placeholder="Search messages"
+        />
       </div>
     </header>
     <div class="messages">
       <div
         class="message"
-        v-for="(message, index) in $parent.getMessages($store.state.companionId)"
+        v-for="(message, index) in $parent.getMessages(
+          $store.state.companionId
+        )"
         :key="index"
       >
         <label
           class="checkbox"
-          v-if="typeof message !== 'string' && selecting"
           @click="$store.commit('selectMessage', { message })"
-          :class="isSelected(message) && 'checkbox_checked'"
+          :class="{ checkbox_checked: isSelected(message) }"
         >
           <input type="checkbox" />
         </label>
         <div
-          v-if="typeof message !== 'string'"
-          class="bubble"
-          :class="message.senderId === $store.state.currentId && 'bubble_current'"
+          v-if="typeof(message) !== 'string'"
+          :class="[
+            'bubble',
+            { bubble_current: message.senderId === $store.state.currentId }
+          ]"
         >
           {{ message.text }}
           <p class="dim time">
@@ -57,7 +74,12 @@
       </div>
     </div>
     <form class="form spacer" @submit.prevent="addMessage(draft)">
-      <input class="input" type="text" v-model="draft" placeholder="Enter message" />
+      <input
+        class="input"
+        type="text"
+        v-model="draft"
+        placeholder="Enter message"
+      />
       <button type="submit" class="button">
         <img src="../resources/send.svg" />
       </button>
@@ -80,35 +102,38 @@ export default {
       profile: -1,
       popup: false,
       selecting: false
-    }
+    };
   },
   methods: {
     addMessage(text) {
-      text && this.$store.commit('addMessage', { text })
-      this.$store.commit('setDraft', { text: '' })
+      text && this.$store.commit('addMessage', { text });
+      this.$store.commit('setDraft', { text: '' });
     },
     clearChat() {
-      this.$store.commit('clearChat')
-      this.$store.commit('toggleOverlay')
+      this.$store.commit('clearChat');
+      this.$store.commit('toggleOverlay');
     },
     toggleSelect() {
-      this.selecting = !this.selecting
+      this.selecting = !this.selecting;
     },
     isSelected(message) {
-      let chat = this.$parent.storeChat()
+      let chat = this.$parent.storeChat();
       if (chat && chat.selected.includes(message)) {
-        return true
-      } else return false
+        return true;
+      } else return false;
     }
   },
   computed: {
     draft: {
       get() {
-        return this.$parent.storeChat().draft
+        return this.$parent.storeChat().draft;
+      },
+      set(text) {
+        this.$store.commit('setDraft', { text });
       }
     }
   }
-}
+};
 </script>
 <style scoped>
 .chat {
