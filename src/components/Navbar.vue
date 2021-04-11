@@ -1,7 +1,10 @@
 <template>
   <nav
     class="navbar"
-    v-if="($store.state.width < 500 && $store.state.companionId < 0) || $store.state.width > 500"
+    v-if="
+      ($store.state.width < 500 && $store.state.companionId < 0) ||
+        $store.state.width > 500
+    "
   >
     <header class="header spacer">
       <div class="flex" v-if="!searching">
@@ -17,7 +20,11 @@
         <button class="button" @click="searching = false">
           <img src="../resources/back.svg" />
         </button>
-        <input class="input" v-model="$store.state.searchChats" placeholder="Search chats" />
+        <input
+          class="input"
+          v-model="$store.state.searchChats"
+          placeholder="Search chats"
+        />
       </div>
     </header>
     <div class="chats">
@@ -39,10 +46,21 @@
     </div>
     <div v-if="popup" class="overlay" @click="popup = false">
       <div class="menu menu_left">
-        <button class="button" @click="$parent.openProfile($store.state.currentId)">Profile</button>
-        <button class="button" @click="$store.commit('toggleSettings')">Settings</button>
-        <button class="button" @click="$store.commit('toggleContact')">Add contact</button>
-        <button class="button" @click="$store.commit('loginUser', -1)">Logout</button>
+        <button
+          class="button"
+          @click="$parent.openProfile($store.state.currentId)"
+        >
+          Profile
+        </button>
+        <button class="button" @click="$store.commit('toggleSettings')">
+          Settings
+        </button>
+        <button class="button" @click="$store.commit('toggleContact')">
+          Add contact
+        </button>
+        <button class="button" @click="$store.commit('loginUser', -1)">
+          Logout
+        </button>
       </div>
     </div>
   </nav>
@@ -53,37 +71,38 @@ export default {
     return {
       searching: false,
       popup: false
-    }
+    };
   },
   methods: {
     getChats() {
-      let chats = []
-      this.$store.state.messages.map(
-        (message) =>
-          message.receiverId === this.$store.state.currentId &&
-          chats.push(this.$store.state.users[message.senderId])
-      )
-      this.$store.state.messages.map(
-        (message) =>
-          message.senderId === this.$store.state.currentId &&
-          chats.push(this.$store.state.users[message.receiverId])
-      )
-      if (this.$store.state.searchChats) {
-        chats = chats.filter((chat) =>
-          chat.name.toLowerCase().includes(this.$store.state.searchChats.toLowerCase())
-        )
+      let chats = [];
+      const { messages, users, currentId, searchChats } = this.$store.state;
+
+      messages.forEach(({ receiverId, senderId }) => {
+        if (receiverId === currentId) chats.push(users[senderId]);
+        if (senderId === currentId) chats.push(users[receiverId]);
+      });
+
+      if (searchChats) {
+        chats = chats.filter(chat =>
+          chat.name.toLowerCase().includes(searchChats.toLowerCase())
+        );
       }
-      chats.map((chat) => {
-        let messages = this.$parent.getMessages(chat.id)
+
+      chats.map(chat => {
+        const messages = this.$parent.getMessages(chat.id);
+
         if (messages.length > 0) {
-          chat.lastMessage = messages[messages.length - 1].text
-          chat.lastTime = messages[messages.length - 1].time
+          const lastMessage = messages[messages.length - 1];
+          chat.lastMessage = lastMessage.text;
+          chat.lastTime = lastMessage.time;
         }
-      })
-      return chats.filter((value, index, self) => self.indexOf(value) === index)
+      });
+
+      return Array.from(new Set(chats));
     }
   }
-}
+};
 </script>
 <style scoped>
 .navbar {
