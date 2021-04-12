@@ -4,41 +4,41 @@ export function addMessage(state, { text }) {
     receiverId: state.companionId,
     text,
     time: Date.now()
-  });
+  })
 }
 
 export function loginUser(state, { id }) {
-  state.currentId = id;
+  state.currentId = id
 }
 
 export function registerUser(state, { name }) {
-  const id = state.users.length;
+  const id = state.users.length
 
   state.users.push({
     id,
     name: name,
     avatar: '',
     status: ''
-  });
+  })
 
-  state.currentId = id + 1;
+  state.currentId = id + 1
 }
 
 export function setCompanion(state, { id }) {
-  state.companionId = id;
-  state.chats.push({ id, draft: '', selected: [] });
+  state.companionId = id
+  state.chats.push({ id, draft: '', selected: [] })
 }
 
 export function toggleSettings(state) {
-  state.isSettingsOpen = !state.isSettingsOpen;
+  state.isSettingsOpen = !state.isSettingsOpen
 }
 
 export function toggleContact(state) {
-  state.isContactOpen = !state.isContactOpen;
+  state.isContactOpen = !state.isContactOpen
 }
 
 export function openProfile(state, { id }) {
-  state.openedProfile = id;
+  state.openedProfile = id
 }
 
 export function clearChat(state) {
@@ -46,22 +46,33 @@ export function clearChat(state) {
     ({ senderId, receiverId }) =>
       !(senderId === state.currentId && receiverId === state.companionId) &&
       !(senderId === state.companionId && receiverId === state.currentId)
-  );
-  state.setCompanion(-1);
+  )
+  state.setCompanion(-1)
 }
 
 export function setDraft(state, { text }) {
-  let chat = state.chats.find(chat => chat.id === state.companionId);
+  let chat = state.chats.find((chat) => chat.id === state.companionId)
   if (!chat) {
-    state.chats.push({ draft: '', selected: [] });
+    state.chats.push({ draft: '', selected: [] })
   }
-  chat.draft = text;
+  chat.draft = text
 }
 
 export function selectMessage(state, { message }) {
-  let chat = state.chats.find(chat => chat.id === state.companionId);
+  let chat = state.chats.find((chat) => chat.id === state.companionId)
   if (!chat) {
-    state.chats.push({ draft: '', selected: [] });
+    state.chats.push({ draft: '', selected: [] })
   }
-  chat.selected.push(message);
+  if (chat.selected.includes(message)) {
+    state.chats
+      .find((chat) => chat.id === state.companionId)
+      .selected.splice(chat.selected.indexOf(message), 1)
+  } else {
+    chat.selected.push(message)
+  }
+}
+
+export function deleteSelected(state) {
+  let chat = state.chats.find((chat) => chat.id === state.companionId)
+  state.messages = state.messages.filter((message) => !chat.selected.includes(message))
 }
