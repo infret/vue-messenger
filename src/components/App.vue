@@ -12,101 +12,86 @@
 </template>
 
 <script>
-import Navbar from './Navbar';
-import Chat from './Chat';
-import Profile from './Profile';
-import Settings from './Settings';
-import ContactDialog from './ContactDialog';
-import Login from './Login';
+import Navbar from './Navbar'
+import Chat from './Chat'
+import Profile from './Profile'
+import Settings from './Settings'
+import ContactDialog from './ContactDialog'
+import Login from './Login'
 
 export default {
-  created() {
-    window.addEventListener('resize', this.setWidth);
-  },
-  destroyed() {
-    window.removeEventListener('resize', this.setWidth);
-  },
   name: 'App',
   components: { Navbar, Chat, Profile, Settings, ContactDialog, Login },
   methods: {
-    setWidth() {
-      this.$store.state.width = window.innerWidth;
-    },
     setCompanion(id) {
-      this.$store.commit('setCompanion', { id });
+      this.$store.commit('setCompanion', { id })
     },
     openProfile(id) {
-      this.$store.commit('openProfile', { id });
+      this.$store.commit('openProfile', { id })
     },
     getTime(ms) {
-      const time = new Date(ms);
+      const time = new Date(ms)
       return time
         .toLocaleString('en-GB', {
           hour: 'numeric',
           minute: '2-digit'
         })
         .split(' ')
-        .pop();
+        .pop()
     },
     getDate(ms) {
-      const time = new Date(ms);
-      return time.toLocaleString('en-GB', { month: 'short', day: 'numeric' });
+      const time = new Date(ms)
+      return time.toLocaleString('en-GB', { month: 'short', day: 'numeric' })
     },
     getMessages(id) {
-      let messages = [];
-      const { currentId, messages: storeMessages } = this.$store.state;
+      let messages = []
+      const { currentId, messages: storeMessages } = this.$store.state
 
-      storeMessages.forEach(message => {
+      storeMessages.forEach((message) => {
         if (message.senderId === currentId && message.receiverId === id) {
-          messages.push(message);
+          messages.push(message)
         }
-      });
+      })
 
-      storeMessages.forEach(message => {
+      storeMessages.forEach((message) => {
         if (message.receiverId === currentId && message.senderId === id) {
-          messages.push(message);
+          messages.push(message)
         }
-      });
+      })
 
       if (messages.length > 0) {
         if (this.$store.state.searchMessages) {
-          messages = messages.filter(message =>
-            message.text
-              .toLowerCase()
-              .includes(this.$store.state.searchMessages.toLowerCase())
-          );
+          messages = messages.filter((message) =>
+            message.text.toLowerCase().includes(this.$store.state.searchMessages.toLowerCase())
+          )
         }
 
-        messages.sort((a, b) => a.time - b.time);
+        messages.sort((a, b) => a.time - b.time)
 
-        let lastDate = this.getDate(messages[0].time);
-        let chunks = [lastDate];
+        let lastDate = this.getDate(messages[0].time)
+        let chunks = [lastDate]
 
         for (let i = 0; i < messages.length; i++) {
           if (this.getDate(messages[i].time) === lastDate) {
-            chunks.push(messages[i]);
+            chunks.push(messages[i])
           } else {
-            lastDate = this.getDate(messages[i].time);
-            chunks.push(lastDate, messages[i]);
+            lastDate = this.getDate(messages[i].time)
+            chunks.push(lastDate, messages[i])
           }
         }
 
-        return chunks;
+        return chunks
       }
     },
     storeChat() {
-      let chat = this.$store.state.chats.find(
-        chat => chat.id === this.$store.state.companionId
-      );
+      let chat = this.$store.state.chats.find((chat) => chat.id === this.$store.state.companionId)
       if (!chat) {
-        this.$store.state.chats.push({ draft: '', selected: [] });
-        return this.$store.state.chats.find(
-          chat => chat.id === this.$store.state.companionId
-        );
-      } else return chat;
+        this.$store.state.chats.push({ draft: '', selected: [] })
+        return this.$store.state.chats.find((chat) => chat.id === this.$store.state.companionId)
+      } else return chat
     }
   }
-};
+}
 </script>
 
 <style>

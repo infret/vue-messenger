@@ -15,7 +15,11 @@
         </h2>
       </button>
       <div class="buttons" v-if="!searching">
-         <button v-if='selecting' class="button" @click="$store.commit('deleteSelected')">
+        <button
+          v-if="selecting || $parent.storeChat().selected.length > 0"
+          class="button"
+          @click="deleteMessages()"
+        >
           <img src="../resources/delete.svg" />
         </button>
         <button class="button" @click="searching = true">
@@ -67,7 +71,7 @@
       </button>
     </form>
     <div v-if="popup" class="overlay" @click="popup = false"></div>
-    <div v-if="popup" class="menu" >
+    <div v-if="popup" class="menu">
       <button class="button" @click="clearChat()">Clear chat</button>
       <button class="button" @click="toggleSelect()">Select messages</button>
     </div>
@@ -93,16 +97,21 @@ export default {
     },
     clearChat() {
       this.$store.commit('clearChat')
-      this.$store.commit('toggleOverlay')
+      this.popup = false
     },
     toggleSelect() {
       this.selecting = !this.selecting
+      this.popup = false
     },
     isSelected(message) {
       let chat = this.$parent.storeChat()
       if (chat && chat.selected.includes(message)) {
         return true
       } else return false
+    },
+    deleteMessages() {
+      this.$store.commit('deleteSelected')
+      this.selecting = false
     }
   },
   computed: {

@@ -1,3 +1,12 @@
+export function initState(state) {
+  const data = localStorage.getItem('store')
+  if (data) {
+    state = data
+  } else {
+    localStorage.setItem('store', JSON.stringify(state))
+  }
+}
+
 export function addMessage(state, { text }) {
   state.messages.push({
     senderId: state.currentId,
