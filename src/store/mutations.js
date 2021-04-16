@@ -81,7 +81,12 @@ export function selectMessage(state, { message }) {
   }
 }
 
-export function deleteSelected(state) {
+export function deleteMessages(state) {
   let chat = state.chats.find((chat) => chat.id === state.companionId)
   state.messages = state.messages.filter((message) => !chat.selected.includes(message))
+}
+
+export function resendMessages(state){
+  let chat = state.chats.find((chat) => chat.id === state.companionId)
+  chat.selected.map(message => state.messages.push(message))
 }

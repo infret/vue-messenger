@@ -18,6 +18,13 @@
         <button
           v-if="selecting || $parent.storeChat().selected.length > 0"
           class="button"
+          @click="resendMessages()"
+        >
+          <img src="../resources/resend.svg" />
+        </button>
+        <button
+          v-if="selecting || $parent.storeChat().selected.length > 0"
+          class="button"
           @click="deleteMessages()"
         >
           <img src="../resources/delete.svg" />
@@ -110,7 +117,11 @@ export default {
       } else return false
     },
     deleteMessages() {
-      this.$store.commit('deleteSelected')
+      this.$store.commit('deleteMessages')
+      this.selecting = false
+    },
+    resendMessages(){
+      this.$store.commit('resendMessages')
       this.selecting = false
     }
   },
