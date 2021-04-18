@@ -48,6 +48,10 @@ export function toggleContact(state) {
   state.isContactOpen = !state.isContactOpen
 }
 
+export function toggleResend(state) {
+  state.isResendOpen = !state.isResendOpen
+}
+
 export function openProfile(state, { id }) {
   state.openedProfile = id
 }
@@ -88,13 +92,13 @@ export function deleteMessages(state) {
   state.messages = state.messages.filter((message) => !chat.selected.includes(message))
 }
 
-export function resendMessages(state) {
+export function resendMessages(state, { id }) {
   let chat = state.chats.find((chat) => chat.id === state.companionId)
   let resent = {
     messages: [],
     time: Date.now(),
     senderId: state.currentId,
-    receiverId: state.companionId
+    receiverId: id
   }
   chat.selected.map((message) => resent.messages.push(message))
   state.messages.push(resent)

@@ -71,6 +71,7 @@ export default new Vuex.Store({
     openedProfile: -1,
     isSettingsOpen: false,
     isContactOpen: false,
+    isResendOpen: false,
     width: window.innerWidth,
     searchChats: '',
     searchMessages: '',

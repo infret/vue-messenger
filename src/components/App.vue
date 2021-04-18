@@ -6,6 +6,7 @@
       <Profile />
       <Settings />
       <ContactDialog />
+      <ResendDialog />
     </main>
     <Login v-else />
   </div>
@@ -17,11 +18,12 @@ import Chat from './Chat'
 import Profile from './Profile'
 import Settings from './Settings'
 import ContactDialog from './ContactDialog'
+import ResendDialog from './ResendDialog'
 import Login from './Login'
 
 export default {
   name: 'App',
-  components: { Navbar, Chat, Profile, Settings, ContactDialog, Login },
+  components: { Navbar, Chat, Profile, Settings, ContactDialog, Login, ResendDialog },
   methods: {
     setCompanion(id) {
       this.$store.commit('setCompanion', { id })
@@ -89,6 +91,30 @@ export default {
         this.$store.state.chats.push({ draft: '', selected: [] })
         return this.$store.state.chats.find((chat) => chat.id === this.$store.state.companionId)
       } else return chat
+    },
+    getChats() {
+      let chats = []
+      const { messages, users, currentId, searchChats } = this.$store.state
+
+      messages.forEach(({ receiverId, senderId }) => {
+        if (receiverId === currentId) chats.push(users[senderId])
+        if (senderId === currentId) chats.push(users[receiverId])
+      })
+
+      if (searchChats) {
+        chats = chats.filter((chat) => chat.name.toLowerCase().includes(searchChats.toLowerCase()))
+      }
+
+      chats.map((chat) => {
+        const messages = this.getMessages(chat.id)
+        if (messages.length > 0) {
+          const lastMessage = messages[messages.length - 1]
+          chat.lastMessage = lastMessage.text || '[Resent message]'
+          chat.lastTime = lastMessage.time
+        }
+      })
+
+      return Array.from(new Set(chats))
     }
   }
 }

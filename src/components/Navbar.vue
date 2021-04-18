@@ -23,7 +23,7 @@
     <div class="chats">
       <button
         class="user"
-        v-for="chat in getChats()"
+        v-for="chat in $parent.getChats()"
         :key="chat.id"
         @click="$parent.setCompanion(chat.id)"
       >
@@ -64,30 +64,7 @@ export default {
     }
   },
   methods: {
-    getChats() {
-      let chats = []
-      const { messages, users, currentId, searchChats } = this.$store.state
-
-      messages.forEach(({ receiverId, senderId }) => {
-        if (receiverId === currentId) chats.push(users[senderId])
-        if (senderId === currentId) chats.push(users[receiverId])
-      })
-
-      if (searchChats) {
-        chats = chats.filter((chat) => chat.name.toLowerCase().includes(searchChats.toLowerCase()))
-      }
-
-      chats.map((chat) => {
-        const messages = this.$parent.getMessages(chat.id)
-        if (messages.length > 0) {
-          const lastMessage = messages[messages.length - 1]
-          chat.lastMessage = lastMessage.text || '[Resent message]'
-          chat.lastTime = lastMessage.time
-        }
-      })
-
-      return Array.from(new Set(chats))
-    }
+   
   }
 }
 </script>

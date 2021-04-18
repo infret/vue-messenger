@@ -18,7 +18,7 @@
         <button
           v-if="selecting || $parent.storeChat().selected.length > 0"
           class="button"
-          @click="resendMessages()"
+          @click="toggleResend()"
         >
           <img src="../resources/resend.svg" />
         </button>
@@ -150,9 +150,9 @@ export default {
       this.$store.commit('deleteMessages')
       this.selecting = false
     },
-    resendMessages() {
-      this.$store.commit('resendMessages')
-      this.selecting = false
+    toggleResend() {
+      this.$store.commit('toggleResend')
+      this.toggleSelect()
     }
   },
   computed: {
