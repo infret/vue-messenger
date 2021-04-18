@@ -1,10 +1,7 @@
 <template>
   <nav
     class="navbar"
-    v-if="
-      ($store.state.width < 500 && $store.state.companionId < 0) ||
-        $store.state.width > 500
-    "
+    v-if="($store.state.width < 500 && $store.state.companionId < 0) || $store.state.width > 500"
   >
     <header class="header spacer">
       <div class="flex" v-if="!searching">
@@ -20,11 +17,7 @@
         <button class="button" @click="searching = false">
           <img src="../resources/back.svg" />
         </button>
-        <input
-          class="input"
-          v-model="$store.state.searchChats"
-          placeholder="Search chats"
-        />
+        <input class="input" v-model="$store.state.searchChats" placeholder="Search chats" />
       </div>
     </header>
     <div class="chats">
@@ -46,10 +39,7 @@
     </div>
     <div v-if="popup" class="overlay" @click="popup = false">
       <div class="menu menu_left">
-        <button
-          class="button"
-          @click="$parent.openProfile($store.state.currentId)"
-        >
+        <button class="button" @click="$parent.openProfile($store.state.currentId)">
           Profile
         </button>
         <button class="button" @click="$store.commit('toggleSettings')">
@@ -71,38 +61,35 @@ export default {
     return {
       searching: false,
       popup: false
-    };
+    }
   },
   methods: {
     getChats() {
-      let chats = [];
-      const { messages, users, currentId, searchChats } = this.$store.state;
+      let chats = []
+      const { messages, users, currentId, searchChats } = this.$store.state
 
       messages.forEach(({ receiverId, senderId }) => {
-        if (receiverId === currentId) chats.push(users[senderId]);
-        if (senderId === currentId) chats.push(users[receiverId]);
-      });
+        if (receiverId === currentId) chats.push(users[senderId])
+        if (senderId === currentId) chats.push(users[receiverId])
+      })
 
       if (searchChats) {
-        chats = chats.filter(chat =>
-          chat.name.toLowerCase().includes(searchChats.toLowerCase())
-        );
+        chats = chats.filter((chat) => chat.name.toLowerCase().includes(searchChats.toLowerCase()))
       }
 
-      chats.map(chat => {
-        const messages = this.$parent.getMessages(chat.id);
-
+      chats.map((chat) => {
+        const messages = this.$parent.getMessages(chat.id)
         if (messages.length > 0) {
-          const lastMessage = messages[messages.length - 1];
-          chat.lastMessage = lastMessage.text;
-          chat.lastTime = lastMessage.time;
+          const lastMessage = messages[messages.length - 1]
+          chat.lastMessage = lastMessage.text || '[Resent message]'
+          chat.lastTime = lastMessage.time
         }
-      });
+      })
 
-      return Array.from(new Set(chats));
+      return Array.from(new Set(chats))
     }
   }
-};
+}
 </script>
 <style scoped>
 .navbar {

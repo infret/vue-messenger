@@ -34,8 +34,10 @@ export function registerUser(state, { name }) {
 }
 
 export function setCompanion(state, { id }) {
-  state.companionId = id
-  state.chats.push({ id, draft: '', selected: [] })
+  if (state.currentId !== id) {
+    state.companionId = id
+    state.chats.push({ id, draft: '', selected: [] })
+  }
 }
 
 export function toggleSettings(state) {
@@ -86,7 +88,14 @@ export function deleteMessages(state) {
   state.messages = state.messages.filter((message) => !chat.selected.includes(message))
 }
 
-export function resendMessages(state){
+export function resendMessages(state) {
   let chat = state.chats.find((chat) => chat.id === state.companionId)
-  chat.selected.map(message => state.messages.push(message))
+  let resent = {
+    messages: [],
+    time: Date.now(),
+    senderId: state.currentId,
+    receiverId: state.companionId
+  }
+  chat.selected.map((message) => resent.messages.push(message))
+  state.messages.push(resent)
 }

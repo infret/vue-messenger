@@ -58,7 +58,7 @@
           <input type="checkbox" />
         </label>
         <div
-          v-if="typeof message !== 'string'"
+          v-if="typeof message !== 'string' && !message.messages"
           :class="['bubble', { bubble_current: message.senderId === $store.state.currentId }]"
         >
           {{ message.text }}
@@ -66,7 +66,37 @@
             {{ $parent.getTime(message.time) }}
           </p>
         </div>
-        <div v-else class="date">
+        <div
+          v-if="typeof message !== 'string' && message.messages"
+          :class="[
+            'bubble_resent',
+
+            { bubble_current: message.senderId === $store.state.currentId }
+          ]"
+        >
+          <div v-for="(resent, index) in message.messages" :key="index" class="message_resent">
+            <div class="flex">
+              <img
+                class="avatar avatar_resent"
+                :src="$store.state.users[resent.senderId].avatar"
+                alt="user's avatar"
+              />
+              <div>
+                <button @click="$parent.setCompanion(resent.senderId)">
+                  {{ $store.state.users[resent.senderId].name }}
+                </button>
+                <p class="dim time margin_resent">
+                  {{ $parent.getDate(resent.time) + ' ' + $parent.getTime(resent.time) }}
+                </p>
+              </div>
+            </div>
+            <p class="margin_resent">{{ resent.text }}</p>
+          </div>
+          <p class="dim time">
+            {{ $parent.getTime(message.time) }}
+          </p>
+        </div>
+        <div v-if="typeof message === 'string'" class="date">
           {{ message }}
         </div>
       </div>
@@ -120,7 +150,7 @@ export default {
       this.$store.commit('deleteMessages')
       this.selecting = false
     },
-    resendMessages(){
+    resendMessages() {
       this.$store.commit('resendMessages')
       this.selecting = false
     }
@@ -158,6 +188,31 @@ export default {
   font-size: 16px;
   display: flex;
   align-items: center;
+}
+
+.avatar_resent {
+  margin-right: 10px;
+}
+
+.bubble_resent {
+  border: 1px solid gainsboro;
+  border-radius: 15px;
+  max-width: 320px;
+  padding: 10px 5px 10px 10px;
+  margin: 2px 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.message_resent {
+  width: 100%;
+  border-left: 3px solid grey;
+  padding: 0 10px;
+  margin: 5px 0;
+}
+
+.margin_resent {
+  margin-top: 5px;
 }
 
 .bubble {

@@ -1,8 +1,8 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import * as mutations from './mutations';
+import Vue from 'vue'
+import Vuex from 'vuex'
+import * as mutations from './mutations'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 const users = [
   {
@@ -40,7 +40,7 @@ const users = [
       'https://images.unsplash.com/photo-1603239699774-885100e49753?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTd8fHNpbGhvdWV0dGV8ZW58MHx8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60',
     status: 'Sleeping'
   }
-];
+]
 
 const messages = [
   { senderId: 1, receiverId: 0, text: 'Hi', time: 1616434910000 },
@@ -52,8 +52,17 @@ const messages = [
     text: 'Good morning',
     time: 1616434923000
   },
-  { senderId: 4, receiverId: 0, text: 'Hola', time: 1616434914000 }
-];
+  { senderId: 4, receiverId: 0, text: 'Hola', time: 1616434914000 },
+  {
+    senderId: 0,
+    receiverId: 1,
+    messages: [
+      { senderId: 1, receiverId: 0, text: 'Hi', time: 1616434910000 },
+      { senderId: 0, receiverId: 1, text: 'Sup', time: 1616450000000 }
+    ],
+    time: 1618753690500
+  }
+]
 
 export default new Vuex.Store({
   state: {
@@ -70,4 +79,4 @@ export default new Vuex.Store({
     chats: [{ id: 1, draft: '', selected: [] }]
   },
   mutations
-});
+})
