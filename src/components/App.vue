@@ -89,8 +89,8 @@ export default {
       let chat = this.$store.state.chats.find((chat) => chat.id === this.$store.state.companionId)
       if (!chat) {
         this.$store.state.chats.push({ draft: '', selected: [] })
-        return this.$store.state.chats.find((chat) => chat.id === this.$store.state.companionId)
-      } else return chat
+      }
+      return chat
     },
     getChats() {
       let chats = []

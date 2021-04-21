@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import * as mutations from './mutations'
+import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex)
 
@@ -77,7 +78,8 @@ export default new Vuex.Store({
     searchMessages: '',
     users,
     messages,
-    chats: [{ id: 1, draft: '', selected: [] }]
+    chats: []
   },
-  mutations
+  mutations,
+  plugins: [createPersistedState()],
 })

@@ -15,18 +15,10 @@
         </h2>
       </button>
       <div class="buttons" v-if="!searching">
-        <button
-          v-if="selecting || $parent.storeChat().selected.length > 0"
-          class="button"
-          @click="toggleResend()"
-        >
+        <button v-if="selecting || isSelecting()" class="button" @click="toggleResend()">
           <img src="../resources/resend.svg" />
         </button>
-        <button
-          v-if="selecting || $parent.storeChat().selected.length > 0"
-          class="button"
-          @click="deleteMessages()"
-        >
+        <button v-if="selecting || isSelecting()" class="button" @click="deleteMessages()">
           <img src="../resources/delete.svg" />
         </button>
         <button class="button" @click="searching = true">
@@ -146,6 +138,12 @@ export default {
         return true
       } else return false
     },
+    isSelecting() {
+      let chat = this.$parent.storeChat()
+      if (chat) {
+        chat.selected ? true : false
+      }
+    },
     deleteMessages() {
       this.$store.commit('deleteMessages')
       this.selecting = false
@@ -158,7 +156,15 @@ export default {
   computed: {
     draft: {
       get() {
-        return this.$parent.storeChat().draft
+        let chat = this.$parent.storeChat()
+        let result = ''
+        if (chat) {
+          let draft = chat.draft
+          if (draft) {
+            result = draft
+          }
+        }
+        return result
       },
       set(text) {
         this.$store.commit('setDraft', { text })

@@ -32,7 +32,7 @@
           <h3 class="name">{{ chat.name }}</h3>
           <div class="flex">
             <p class="last">{{ chat.lastMessage }}</p>
-            <p class="last">{{ $parent.getTime(chat.lastTime) }}</p>
+            <p class="last">{{ lastTime(chat.lastTime) }}</p>
           </div>
         </div>
       </button>
@@ -64,7 +64,14 @@ export default {
     }
   },
   methods: {
-   
+    lastTime(time) {
+      let date = this.$parent.getDate(time)
+      if (date !== this.$parent.getDate(Date.now())) {
+        return date
+      } else {
+        return this.$parent.getTime(time)
+      }
+    }
   }
 }
 </script>

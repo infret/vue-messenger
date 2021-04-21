@@ -1,8 +1,3 @@
-export function initStore(state) {
-    state = JSON.parse(localStorage.getItem('state'))
-    console.log('Getting state', state)
-}
-
 export function addMessage(state, { text }) {
   state.messages.push({
     senderId: state.currentId,
@@ -25,7 +20,6 @@ export function registerUser(state, { name }) {
     avatar: '',
     status: ''
   })
-
   state.currentId = id + 1
 }
 
