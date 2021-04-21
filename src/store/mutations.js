@@ -1,10 +1,6 @@
-export function initState(state) {
-  const data = localStorage.getItem('store')
-  if (data) {
-    state = data
-  } else {
-    localStorage.setItem('store', JSON.stringify(state))
-  }
+export function initStore(state) {
+    state = JSON.parse(localStorage.getItem('state'))
+    console.log('Getting state', state)
 }
 
 export function addMessage(state, { text }) {

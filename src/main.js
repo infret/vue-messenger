@@ -7,20 +7,25 @@ Vue.config.productionTip = false
 new Vue({
   store,
   beforeCreate() {
-    this.$store.commit('initState')
     window.addEventListener('resize', this.setWidth)
   },
-  created() {
-    window.addEventListener('beforeunload', this.setStore)
+  destroyed() {
+    window.removeEventListener('resize', this.setWidth)
+  },
+  mounted() {
+    if (localStorage.getItem('state')) {
+      this.$store.commit('initStore')
+    }
+    this.setState()
+    setInterval(this.setState, 6 * 1000)
   },
   methods: {
     setWidth() {
       this.$store.state.width = window.innerWidth
     },
-    setStore() {
-      localStorage.setItem('store', JSON.stringify(this.$store.state))
-      console.log('hui')
-      window.removeEventListener('resize', this.setWidth)
+    setState() {
+      localStorage.setItem('state', JSON.stringify(this.$store.state))
+      console.log('Saving state', JSON.stringify(this.$store.state))
     }
   },
   render: (h) => h(App)
