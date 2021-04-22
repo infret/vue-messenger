@@ -75,7 +75,7 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="scss">
 .navbar {
   width: 30%;
   min-width: 300px;
@@ -84,8 +84,8 @@ export default {
 
 .menu_left {
   position: relative;
-  left: calc(-50% + 110px);
-  top: calc(-50% + 110px);
+  left: 10px;
+  top: 10px;
 }
 
 .chats {

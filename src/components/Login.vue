@@ -1,14 +1,14 @@
 <template>
-  <div class="container">
+  <div class="login">
     <h2>Login</h2>
-    <form class="field" @submit.prevent="loginUser()">
+    <form class="login_field" @submit.prevent="loginUser()">
       <input class="input" type="text" v-model="loginName" placeholder="Enter username" />
       <button type="submit" class="button">
         <img src="../resources/login.svg" />
       </button>
     </form>
     <h2>Register</h2>
-    <form class="field" @submit.prevent="registerUser()">
+    <form class="login_field" @submit.prevent="registerUser()">
       <input class="input" type="text" v-model="registerName" placeholder="Enter username" />
       <button type="submit" class="button">
         <img src="../resources/login.svg" />
@@ -20,7 +20,7 @@
       existing username (try
       <b>infret</b>) or register a new one.
     </p>
-    <a href="https://pechkin.dev" class="links"><i>by infret</i></a>
+    <a href="https://pechkin.dev" class="login_link"><i>by infret</i></a>
   </div>
 </template>
 <script>
@@ -55,26 +55,25 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.container {
+<style lang="scss">
+.login {
   border: 1px solid gainsboro;
   padding: 20px;
   width: 300px;
   margin: 20vh auto auto auto;
-}
 
-.field {
-  border: 1px solid gainsboro;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 10px 0 20px 0;
-}
+  &_field {
+    border: 1px solid gainsboro;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0 20px 0;
+  }
 
-.links {
-  margin: 20px 0 10px 0;
-  text-align: center;
-  display: block;
+  &_link {
+    margin: 20px 0 10px 0;
+    text-align: center;
+    display: block;
+  }
 }
 </style>

@@ -173,7 +173,7 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang='scss'>
 .chat {
   height: 100%;
   width: 70%;

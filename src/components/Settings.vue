@@ -1,9 +1,5 @@
 <template>
-  <div
-    v-if="$store.state.isSettingsOpen"
-    class="overlay"
-    @click="toggleSettings"
-  >
+  <div v-if="$store.state.isSettingsOpen" class="overlay" @click="toggleSettings">
     <div class="popup" @click.stop>
       <p class="label">Username:</p>
       <form class="form spacer">
@@ -30,19 +26,13 @@
 export default {
   methods: {
     toggleSettings() {
-      this.$store.commit('toggleSettings');
+      this.$store.commit('toggleSettings')
     }
   },
   computed: {
     currentUser() {
-      return this.$store.state.users[this.$store.state.currentId];
+      return this.$store.state.users[this.$store.state.currentId]
     }
   }
-};
-</script>
-
-<style scoped>
-.label {
-  margin: 10px 0 0 10px;
 }
-</style>
+</script>

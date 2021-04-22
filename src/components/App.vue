@@ -114,13 +114,13 @@ export default {
         }
       })
 
-      return Array.from(new Set(chats))
+      return Array.from(new Set(chats)).sort((a, b) => a.lastTime - b.lastTime)
     }
   }
 }
 </script>
 
-<style>
+<style lang='scss'>
 * {
   margin: 0;
   padding: 0;
@@ -278,6 +278,22 @@ main {
   display: flex;
   flex-direction: column;
   background-color: white;
+}
+
+.profile_avatar {
+  height: 300px;
+  width: 300px;
+  object-fit: cover;
+}
+.profile_desc {
+  padding: 10px 0;
+  display: grid;
+  grid-auto-flow: row;
+  gap: 5px;
+}
+
+.label {
+  margin: 10px 0 0 10px;
 }
 
 @media (min-width: 500px) {
