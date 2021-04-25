@@ -41,14 +41,13 @@
         v-for="(message, index) in $parent.getMessages($store.state.companionId)"
         :key="index"
       >
-        <label
+        <input
           class="checkbox"
           @click="$store.commit('selectMessage', { message })"
           :class="{ checkbox_checked: isSelected(message) }"
           v-if="typeof message !== 'string' && selecting"
-        >
-          <input type="checkbox" />
-        </label>
+          type="checkbox"
+        />
         <div
           v-if="typeof message !== 'string' && !message.messages"
           :class="['bubble', { bubble_current: message.senderId === $store.state.currentId }]"
@@ -62,14 +61,13 @@
           v-if="typeof message !== 'string' && message.messages"
           :class="[
             'bubble_resent',
-
             { bubble_current: message.senderId === $store.state.currentId }
           ]"
         >
           <div v-for="(resent, index) in message.messages" :key="index" class="message_resent">
             <div class="flex">
               <img
-                class="avatar avatar_resent"
+                class="avatar"
                 :src="$store.state.users[resent.senderId].avatar"
                 alt="user's avatar"
               />
@@ -173,7 +171,7 @@ export default {
   }
 }
 </script>
-<style lang='scss'>
+<style lang="scss">
 .chat {
   height: 100%;
   width: 70%;
@@ -194,31 +192,13 @@ export default {
   font-size: 16px;
   display: flex;
   align-items: center;
-}
 
-.avatar_resent {
-  margin-right: 10px;
-}
-
-.bubble_resent {
-  border: 1px solid gainsboro;
-  border-radius: 15px;
-  max-width: 320px;
-  padding: 10px 5px 10px 10px;
-  margin: 2px 12px;
-  display: flex;
-  flex-direction: column;
-}
-
-.message_resent {
-  width: 100%;
-  border-left: 3px solid grey;
-  padding: 0 10px;
-  margin: 5px 0;
-}
-
-.margin_resent {
-  margin-top: 5px;
+  &_resent {
+    width: 100%;
+    border-left: 3px solid grey;
+    padding: 0 10px;
+    margin: 5px 0;
+  }
 }
 
 .bubble {
@@ -229,14 +209,32 @@ export default {
   margin: 2px 12px;
   word-break: break-word;
   white-space: pre-wrap;
-  display: grid;
-  grid-auto-flow: column;
-  gap: 3px;
+  display: flex;
+
+  &_resent {
+    flex-direction: column;
+  }
+
+  &_current {
+    margin-left: auto;
+    background-color: #f1f1f1;
+  }
 }
 
-.bubble_current {
-  margin-left: auto;
-  background-color: #f1f1f1;
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  height: 20px;
+  width: 20px;
+  appearance: none;
+  border: 2px solid gainsboro;
+  border-radius: 50%;
+  margin-left: 10px;
+
+  &_checked {
+    background-color: grey;
+  }
 }
 
 .date {

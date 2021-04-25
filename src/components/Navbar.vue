@@ -82,12 +82,6 @@ export default {
   border-right: 1px solid gainsboro;
 }
 
-.menu_left {
-  position: relative;
-  left: 10px;
-  top: 10px;
-}
-
 .chats {
   height: calc(100% - 50px);
   overflow-y: auto;
@@ -103,6 +97,7 @@ export default {
   margin-left: 10px;
   font-size: 15px;
 }
+
 @media (max-width: 500px) {
   .navbar {
     width: 100%;

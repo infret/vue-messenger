@@ -114,13 +114,13 @@ export default {
         }
       })
 
-      return Array.from(new Set(chats)).sort((a, b) => a.lastTime - b.lastTime)
+      return Array.from(new Set(chats)).sort((a, b) => b.lastTime - a.lastTime)
     }
   }
 }
 </script>
 
-<style lang='scss'>
+<style lang="scss">
 * {
   margin: 0;
   padding: 0;
@@ -160,27 +160,8 @@ main {
   position: relative;
 }
 
-.center {
+@mixin center {
   margin: auto;
-}
-
-.checkbox {
-  display: inline-flex;
-  align-items: center;
-  position: relative;
-}
-
-.checkbox > input {
-  height: 20px;
-  width: 20px;
-  appearance: none;
-  border: 2px solid gainsboro;
-  border-radius: 50%;
-  margin-left: 10px;
-}
-
-.checkbox_checked > input {
-  background-color: grey;
 }
 
 .user {
@@ -250,6 +231,12 @@ main {
   top: 10px;
   right: 10px;
   z-index: 20;
+
+  &_left {
+    position: relative;
+    left: 10px;
+    top: 10px;
+  }
 }
 
 .dim {
