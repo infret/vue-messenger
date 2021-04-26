@@ -1,6 +1,6 @@
 <template>
   <div v-if="isShown" class="overlay" @click="$parent.openProfile(-1)">
-    <div class="popup">
+    <div class="popup profile">
       <img class="profile_avatar" :src="openedProfileUser.avatar" alt="user's avatar" />
       <div class="profile_desc">
         <div class="flex">
@@ -25,3 +25,20 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.profile {
+  color: white;
+}
+.profile_avatar {
+  height: 300px;
+  width: 300px;
+  object-fit: cover;
+}
+
+.profile_desc {
+  padding: 10px 0;
+  display: grid;
+  grid-auto-flow: row;
+  gap: 5px;
+}
+</style>

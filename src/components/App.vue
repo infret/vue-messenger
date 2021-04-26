@@ -121,6 +121,22 @@ export default {
 </script>
 
 <style lang="scss">
+:root {
+  color-scheme: light dark;
+  --text-color: #333;
+  --border-color: gainsboro;
+  --bg-color: white;
+  --accent-color: #0086ff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-color: #ddd;
+    --border-color: #555;
+    --bg-color: #222;
+  }
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -130,13 +146,14 @@ export default {
   background: transparent;
   font-size: 16px;
   font-family: sans-serif;
-  color: black;
+  color: var(--text-color);
   text-decoration: none;
 }
 
 h1 {
-  margin: 10px;
+  margin: 0 10px;
 }
+
 button,
 .checkbox > input {
   cursor: pointer;
@@ -154,14 +171,11 @@ input[type='number']::-webkit-outer-spin-button {
 
 main {
   height: 100vh;
-  border-left: 1px solid gainsboro;
-  border-right: 1px solid gainsboro;
+  border-left: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
   display: flex;
   position: relative;
-}
-
-@mixin center {
-  margin: auto;
+  background-color: var(--bg-color);
 }
 
 .user {
@@ -187,7 +201,7 @@ main {
 .header {
   height: 50px;
   display: flex;
-  border-bottom: 1px solid gainsboro;
+  border-bottom: 1px solid var(--border-color);
   align-items: center;
   width: 100%;
 }
@@ -221,8 +235,8 @@ main {
 }
 
 .menu {
-  background-color: white;
-  border: 1px solid gainsboro;
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
   width: 200px;
   position: absolute;
   display: flex;
@@ -233,14 +247,13 @@ main {
   z-index: 20;
 
   &_left {
-    position: relative;
     left: 10px;
     top: 10px;
   }
 }
 
 .dim {
-  color: grey;
+  color: var(--dim-color);
   font-size: 13px;
 }
 
@@ -254,33 +267,15 @@ main {
   position: absolute;
   width: 100%;
   height: 100%;
+  background-color: #00000055;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #00000055;
 }
 
 .popup {
   width: 300px;
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-}
-
-.profile_avatar {
-  height: 300px;
-  width: 300px;
-  object-fit: cover;
-}
-.profile_desc {
-  padding: 10px 0;
-  display: grid;
-  grid-auto-flow: row;
-  gap: 5px;
-}
-
-.label {
-  margin: 10px 0 0 10px;
+  background-color: var(--bg-color);
 }
 
 @media (min-width: 500px) {
