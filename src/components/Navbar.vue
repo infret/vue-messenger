@@ -111,6 +111,10 @@ export default {
   color: var(--dim-color);
   margin-left: 10px;
   font-size: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 20vw;
 }
 
 @media (max-width: 500px) {
