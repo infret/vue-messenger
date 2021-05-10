@@ -1,25 +1,31 @@
 <template>
   <div class="chat" v-if="$store.state.companionId >= 0">
     <header class="header spacer">
-      <button v-if="!searching" class="button mobile" @click="$parent.setCompanion(-1)">
-        <svg xmlns="http://www.w3.org/2000/svg" height="50" viewBox="0 0 24 24" width="25">
-          <path d="M0 0h24v24H0z" fill="none" />
-          <path
-            d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
-            fill="currentColor"
+      <div class="flex">
+        <button v-if="!searching" class="button mobile" @click="$parent.setCompanion(-1)">
+          <svg xmlns="http://www.w3.org/2000/svg" height="50" viewBox="0 0 24 24" width="25">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path
+              d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+        <button
+          class="user"
+          v-if="!searching"
+          @click="$parent.openProfile($store.state.companionId)"
+        >
+          <img
+            class="avatar"
+            :src="$store.state.users[[$store.state.companionId]].avatar"
+            alt="user's avatar"
           />
-        </svg>
-      </button>
-      <button class="user" v-if="!searching" @click="$parent.openProfile($store.state.companionId)">
-        <img
-          class="avatar"
-          :src="$store.state.users[[$store.state.companionId]].avatar"
-          alt="user's avatar"
-        />
-        <h2 class="name">
-          {{ $store.state.users[[$store.state.companionId]].name }}
-        </h2>
-      </button>
+          <h2 class="name">
+            {{ $store.state.users[[$store.state.companionId]].name }}
+          </h2>
+        </button>
+      </div>
       <div class="buttons" v-if="!searching">
         <button v-if="selecting || isSelecting()" class="button" @click="toggleResend()">
           <svg
@@ -115,16 +121,16 @@
                 :src="$store.state.users[resent.senderId].avatar"
                 alt="user's avatar"
               />
-              <div>
+              <div class="margin">
                 <button @click="$parent.setCompanion(resent.senderId)">
                   {{ $store.state.users[resent.senderId].name }}
                 </button>
-                <p class="dim time margin_resent">
+                <p class="dim time">
                   {{ $parent.getDate(resent.time) + ' ' + $parent.getTime(resent.time) }}
                 </p>
               </div>
             </div>
-            <p class="margin_resent">{{ resent.text }}</p>
+            <p class="margin">{{ resent.text }}</p>
           </div>
           <p class="dim time">
             {{ $parent.getTime(message.time) }}
@@ -150,7 +156,7 @@
       <button class="button" @click="toggleSelect()">Select messages</button>
     </div>
   </div>
-  <div v-else class="flex">
+  <div v-else class="flex desktop">
     <h2>Select chat</h2>
   </div>
 </template>
@@ -242,9 +248,13 @@ export default {
 
   &_resent {
     width: 100%;
-    border-left: 3px solid var(--text-color);
+    border-left: 3px solid white;
     padding: 0 10px;
     margin: 5px 0;
+
+    * {
+      color: white;
+    }
   }
 }
 
@@ -265,8 +275,13 @@ export default {
   &_current {
     margin-left: auto;
     background-color: var(--accent-color);
+    color: white;
     border-radius: 15px 15px 0 15px;
   }
+}
+
+.margin {
+  margin: 2px 5px;
 }
 
 .checkbox {
@@ -294,5 +309,11 @@ export default {
 
 .time {
   align-self: end;
+}
+
+@media (max-width: 600px) {
+  .chat {
+    width: 100%;
+  }
 }
 </style>

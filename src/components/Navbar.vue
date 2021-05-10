@@ -1,7 +1,7 @@
 <template>
   <nav
     class="navbar"
-    v-if="($store.state.width < 500 && $store.state.companionId < 0) || $store.state.width > 500"
+    v-if="($store.state.width <= 600 && $store.state.companionId < 0) || $store.state.width > 600"
   >
     <header class="header spacer">
       <div class="flex" v-if="!searching">
@@ -37,15 +37,15 @@
     </header>
     <div class="chats">
       <button
-        class="user"
+        class="link"
         v-for="chat in $parent.getChats()"
         :key="chat.id"
         @click="$parent.setCompanion(chat.id)"
       >
         <img class="avatar" :src="chat.avatar" alt="user's avatar" />
-        <div class="link">
+        <div class="column">
           <h3 class="name">{{ chat.name }}</h3>
-          <div class="flex">
+          <div class="flex spacer">
             <p class="last">{{ chat.lastMessage }}</p>
             <p class="last">{{ lastTime(chat.lastTime) }}</p>
           </div>
@@ -99,12 +99,15 @@ export default {
 
 .chats {
   height: calc(100% - 50px);
-  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .link {
+  height: 50px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  width: 100%;
 }
 
 .last {
@@ -114,10 +117,9 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  max-width: 20vw;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
   .navbar {
     width: 100%;
   }

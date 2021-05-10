@@ -123,7 +123,7 @@ export default {
 <style lang="scss">
 :root {
   color-scheme: light dark;
-  --text-color: #333;
+  --fg-color: #333;
   --border-color: gainsboro;
   --bg-color: white;
   --accent-color: #0086ff;
@@ -131,7 +131,7 @@ export default {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text-color: #ddd;
+    --fg-color: #eee;
     --border-color: #555;
     --bg-color: #222;
   }
@@ -146,7 +146,7 @@ export default {
   background: transparent;
   font-size: 16px;
   font-family: sans-serif;
-  color: var(--text-color);
+  color: var(--fg-color);
   text-decoration: none;
 }
 
@@ -209,6 +209,11 @@ main {
 .flex {
   display: flex;
   align-items: center;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
   width: 100%;
 }
 
@@ -278,8 +283,14 @@ main {
   background-color: var(--bg-color);
 }
 
-@media (min-width: 500px) {
+@media (min-width: 600px) {
   .mobile {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .desktop {
     display: none;
   }
 }
