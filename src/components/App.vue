@@ -24,6 +24,9 @@ import Login from './Login'
 export default {
   name: 'App',
   components: { Navbar, Chat, Profile, Settings, ContactDialog, Login, ResendDialog },
+  created() {
+    this.storeChat()
+  },
   methods: {
     setCompanion(id) {
       this.$store.commit('setCompanion', { id })
@@ -81,16 +84,14 @@ export default {
             chunks.push(lastDate, messages[i])
           }
         }
-
         return chunks
       }
     },
     storeChat() {
       let chat = this.$store.state.chats.find((chat) => chat.id === this.$store.state.companionId)
       if (!chat) {
-        this.$store.state.chats.push({ draft: '', selected: [] })
+        this.$store.state.chats.push({ id: this.$store.companionId, draft: '', selected: [] })
       }
-      return chat
     },
     getChats() {
       let chats = []
@@ -122,7 +123,6 @@ export default {
 
 <style lang="scss">
 :root {
-  color-scheme: light dark;
   --fg-color: #333;
   --border-color: gainsboro;
   --bg-color: white;

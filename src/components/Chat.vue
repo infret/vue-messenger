@@ -27,7 +27,15 @@
         </button>
       </div>
       <div class="buttons" v-if="!searching">
-        <button v-if="selecting || isSelecting()" class="button" @click="toggleResend()">
+        <button
+          v-if="
+            selecting &&
+              $store.state.chats.find((chat) => chat.id === $store.state.companionId).selected
+                .length > 0
+          "
+          class="button"
+          @click="toggleResend()"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="50"
@@ -39,7 +47,15 @@
             <path d="M10 9V5l-7 7 7 7v-4.1c5 0 8.5 1.6 11 5.1-1-5-4-10-11-11z" />
           </svg>
         </button>
-        <button v-if="selecting || isSelecting()" class="button" @click="deleteMessages()">
+        <button
+          v-if="
+            selecting &&
+              $store.state.chats.find((chat) => chat.id === $store.state.companionId).selected
+                .length > 0
+          "
+          class="button"
+          @click="deleteMessages()"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="50"
@@ -188,12 +204,6 @@ export default {
       if (chat && chat.selected.includes(message)) {
         return true
       } else return false
-    },
-    isSelecting() {
-      let chat = this.$parent.storeChat()
-      if (chat) {
-        chat.selected ? true : false
-      }
     },
     deleteMessages() {
       this.$store.commit('deleteMessages')
